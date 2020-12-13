@@ -1,8 +1,12 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from "../pages/home";
-import Register from "../pages/register";
 import { Ionicons, FontAwesome, MaterialIcons } from "@expo/vector-icons";
+
+//pages
+import Home from "../pages/home";
+import Freight from "../pages/freight";
+import Locations from "../pages/locations";
+import Profile from "../pages/profile";
 
 const {Navigator, Screen} = createBottomTabNavigator();
 
@@ -53,7 +57,7 @@ function MainTabs() {
     />
       <Screen
     name="Fretes"
-    component={Register}
+    component={Freight}
     options={{
       tabBarLabel: "Fretes",
       tabBarIcon: ({color, size, focused}) => {
@@ -69,7 +73,7 @@ function MainTabs() {
     />
     <Screen
     name="Locais"
-    component={Register}
+    component={Locations}
     options={{
       tabBarLabel: "Locais",
       tabBarIcon: ({color, size, focused}) => {
@@ -85,7 +89,7 @@ function MainTabs() {
     />
     <Screen
     name="Dados"
-    component={Register}
+    component={Profile}
     options={{
       tabBarLabel: "Dados",
       tabBarIcon: ({color, size, focused}) => {
