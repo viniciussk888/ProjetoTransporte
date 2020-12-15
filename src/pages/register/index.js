@@ -6,6 +6,7 @@ import { RadioButton, Button } from 'react-native-paper';
 import Header from '../../components/header'
 
 import styles from './styles'
+import { RectButton } from 'react-native-gesture-handler';
 
 export default function Register() {
   const {navigate} = useNavigation();
@@ -77,6 +78,11 @@ export default function Register() {
       <Button color="#eb001b" mode="contained">
           Cadastrar
         </Button>
+      </View>
+
+      <View style={styles.termosContainer}>
+        <Text style={{marginTop:10,fontWeight:'bold'}}>Estou ciente de todos os termos.</Text>
+        <RectButton><Text style={{fontWeight:'bold',color:'#7041EE'}}>Ler termos & condições</Text></RectButton>
       </View>
       
     </View>
