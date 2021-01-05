@@ -1,11 +1,15 @@
 import { StyleSheet } from "react-native";
-
+import { Dimensions } from "react-native";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#afb7bd",
+    backgroundColor: "#fff",
+    alignItems: "center",
     justifyContent: "center",
-    padding: 40,
+  },
+  map: {
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
   },
 });
 
