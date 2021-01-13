@@ -24,12 +24,13 @@ export default function App() {
   if (!fontsLoaded) {
     return <AppLoading />;
   } else {
-  return (
+    return (
       <>
-      <PaperProvider>
-      <AppStack />
-      <StatusBar style="auto" />
-      </PaperProvider>
+        <PaperProvider>
+          <AppStack />
+          <StatusBar
+            style='light' />
+        </PaperProvider>
       </>
     );
   }

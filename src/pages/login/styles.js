@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#afb7bd",
+    backgroundColor: "#19062b",
     justifyContent: "center",
     alignItems: "center",
     padding: 40,
@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
   },
   titlePrimary: {
     fontFamily: "Archivo_700Bold",
-    color: "#000",
+    color: "#fff",
     fontSize: 18,
     lineHeight: 25,
     marginTop: 5,
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: "Archivo_400Regular",
-    color: "#000",
+    color: "#fff",
     fontSize: 18,
     lineHeight: 25,
     marginBottom: 5,
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   },
   titleRegister: {
     fontFamily: "Archivo_700Bold",
-    color: "#000",
+    color: "#fff",
     fontSize: 16,
     lineHeight: 25,
     marginTop: 5,
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     height: 44,
     padding: 10,
     borderWidth: 1,
-    borderColor: "#000",
+    borderColor: "#fff",
     backgroundColor: "#fff",
     marginVertical: 10,
   },
