@@ -4,7 +4,7 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 30,
     paddingLeft: 20,
-    backgroundColor: '#eb001b'
+    backgroundColor: '#19062b'
   },
   topBar: {
     flexDirection: 'row',

@@ -59,12 +59,6 @@ function Locations() {
               <Categorie />
               <Categorie />
               <Categorie />
-              <Categorie />
-              <Categorie />
-              <Categorie />
-              <Categorie />
-              <Categorie />
-              <Categorie />
             </ScrollView>
           </SafeAreaView>
 
