@@ -22,7 +22,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  titleContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
   title: {
+    textAlign: "center",
     fontFamily: "Archivo_400Regular",
     color: "#fff",
     fontSize: 18,
@@ -32,6 +37,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "column",
     justifyContent: "center",
+    alignItems: "center",
   },
   titleRegister: {
     fontFamily: "Archivo_700Bold",
@@ -51,6 +57,10 @@ const styles = StyleSheet.create({
     borderColor: "#fff",
     backgroundColor: "#fff",
     marginVertical: 10,
+  },
+  buttonSignin: {
+    width: 250,
+    marginTop: 5,
   },
   buttonRegister: {
     marginTop: 10,
