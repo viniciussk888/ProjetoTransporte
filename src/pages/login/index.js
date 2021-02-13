@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  Alert,
   Text,
   View,
   Image,
@@ -15,12 +16,14 @@ import api from "../../services/api";
 import styles from "./styles";
 
 import LogoApp from "../../assets/images/icon.png";
+import { useDispatch } from "react-redux";
 
 export default function Login() {
   //variaveis
   const [loading, setLoading] = useState(false);
   const [document, setDocument] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
 
   //navegação
   const { navigate } = useNavigation();
@@ -45,11 +48,29 @@ export default function Login() {
         document,
         password,
       });
-      alert(response.data.token);
+      if (response.data.token !== null || response.data.token !== "") {
+        dispatch({
+          type: "LOG_IN",
+          token: response.data[0].token,
+          id: response.data[1].id,
+          name: response.data[1].name,
+          profileUrl: response.data[1].profileUrl,
+          auth: 1,
+        });
+        setLoading(false);
+        navigateToHome();
+      } else if (response.status === 200) {
+        Alert.alert("AVISO:", "Ocorreu uma falha ao fazer login!");
+      }
       setLoading(false);
     } catch (error) {
-      console.log(error);
       setLoading(false);
+      if (error.response.status && error.response.status === 401) {
+        Alert.alert("AVISO:", "Credenciais de acesso incorreta!");
+        return;
+      }
+      Alert.alert("#catchError:", " Ocorreu uma falha ao fazer login!");
+      console.log(error.response);
     }
   }
 
