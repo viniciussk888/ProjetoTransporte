@@ -4,13 +4,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#afb7bd",
-    justifyContent: "center",
     padding: 40,
   },
   buttonsContainer: {
-    marginTop: 10,
+    marginTop: 50,
     flexDirection: "column",
-    alignItems: 'center'
+    alignItems: "center",
   },
   input: {
     borderRadius: 8,
@@ -25,14 +24,14 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   radioContainer: {
-    flexDirection: 'row',
-    alignItems: "center"
+    flexDirection: "row",
+    alignItems: "center",
   },
   termosContainer: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
 
 export default styles;

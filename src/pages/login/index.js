@@ -124,7 +124,7 @@ export default function Login() {
           </Button>
         )}
         <RectButton style={styles.buttonRegister} onPress={navigateToRegister}>
-          <Text style={styles.titleRegister}>CADASTRE-SE</Text>
+          <Text style={styles.titleRegister}>CRIAR UMA CONTA</Text>
         </RectButton>
       </View>
     </KeyboardAvoidingView>

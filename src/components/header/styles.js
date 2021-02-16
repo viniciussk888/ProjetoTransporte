@@ -1,29 +1,24 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   container: {
     paddingTop: 30,
     paddingLeft: 20,
-    backgroundColor: '#19062b'
+    backgroundColor: "#19062b",
   },
   topBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between'
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginVertical: 10,
   },
   title: {
-    fontFamily: 'Archivo_700Bold',
-    color: '#fff',
+    fontFamily: "Archivo_700Bold",
+    color: "#fff",
     fontSize: 20,
     lineHeight: 20,
-    marginVertical: 5
+    marginRight: "30%",
   },
-  header: {
-    flexDirection: 'column',
-    alignItems: "center",
-    justifyContent: 'space-between',
-    marginBottom: 10
-  }
-})
+});
 
-export default styles
+export default styles;
