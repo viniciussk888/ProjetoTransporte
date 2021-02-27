@@ -1,28 +1,24 @@
-import React from 'react';
+import React from "react";
 
-import { View, Text } from 'react-native';
+import { View, Text } from "react-native";
 
-import StatusBar from '../../components/statusBar'
+import MyTopTabs from "../../routes/TopTabs";
 
-import styles from './styles'
+import styles from "./styles";
 
 function Freight() {
   return (
-    <View style={styles.container}>
-      <View style={styles.statusBar}>
-      <StatusBar/>
+    <>
+      <View style={styles.container}>
+        <MyTopTabs />
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        ></View>
       </View>
-
-      <View style={{
-      flexDirection: 'row',
-      justifyContent: 'space-between'
-    }}>
-    <Text style={styles.cargasText}>Total em andamento: 5</Text>
-    </View>
-    
-    </View>
-    );
+    </>
+  );
 }
-;
-
 export default Freight;

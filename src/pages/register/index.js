@@ -7,6 +7,7 @@ import Header from "../../components/header";
 
 import styles from "./styles";
 import { RectButton } from "react-native-gesture-handler";
+import Motora from "../../assets/images/motora.svg";
 
 export default function Register() {
   const { navigate } = useNavigation();
@@ -19,10 +20,9 @@ export default function Register() {
 
   return (
     <>
-      <Header title="Informe os dados" />
+      <Header routeToBack="login" title="Informe os dados" />
       <View style={styles.container}>
-        <View></View>
-
+        <Motora width="100%" height="180" />
         <View style={styles.buttonsContainer}>
           <TextInput
             keyboardType="default"

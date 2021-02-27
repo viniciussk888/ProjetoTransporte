@@ -15,7 +15,7 @@ import api from "../../services/api";
 
 import styles from "./styles";
 
-import LogoApp from "../../assets/images/icon.png";
+import LogoApp from "../../assets/images/logo-transp.svg";
 import { useDispatch } from "react-redux";
 
 export default function Login() {
@@ -75,58 +75,63 @@ export default function Login() {
   }
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS == "ios" ? "padding" : "height"}
-      style={styles.container}
-    >
-      <Image source={LogoApp} style={styles.banner} />
+    <>
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
+        <LogoApp width="100%" height="260" />
 
-      <View style={styles.titleContainer}>
-        <Text style={styles.titlePrimary}>Seja bem-vindo</Text>
-        <Text style={styles.title}>
-          A plataforma que vai revolucionar o conceito de transporte!
-        </Text>
-      </View>
+        <View style={styles.titleContainer}>
+          <Text style={styles.titlePrimary}>Seja bem-vindo</Text>
+          <Text style={styles.title}>
+            A plataforma que vai revolucionar o conceito de transporte!
+          </Text>
+        </View>
 
-      <TextInput
-        placeholderTextColor="#000"
-        keyboardType="numeric"
-        placeholder="CPF ou CNPJ"
-        value={document}
-        onChangeText={(text) => setDocument(text)}
-        maxLength={14}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Senha"
-        value={password}
-        onChangeText={(text) => setPassword(text)}
-        secureTextEntry={true}
-        placeholderTextColor="#000"
-        style={styles.input}
-      />
+        <TextInput
+          placeholderTextColor="#000"
+          keyboardType="numeric"
+          placeholder="CPF ou CNPJ"
+          value={document}
+          onChangeText={(text) => setDocument(text)}
+          maxLength={14}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Senha"
+          value={password}
+          onChangeText={(text) => setPassword(text)}
+          secureTextEntry={true}
+          placeholderTextColor="#000"
+          style={styles.input}
+        />
 
-      <View style={styles.buttonContainer}>
-        {loading ? (
-          <ActivityIndicator
-            size="large"
-            animating={true}
-            color={Colors.red800}
-          />
-        ) : (
-          <Button
-            style={styles.buttonSignin}
-            color="#eb001b"
-            mode="contained"
-            onPress={signin}
+        <View style={styles.buttonContainer}>
+          {loading ? (
+            <ActivityIndicator
+              size="large"
+              animating={true}
+              color={Colors.red800}
+            />
+          ) : (
+            <Button
+              style={styles.buttonSignin}
+              color="#eb001b"
+              mode="contained"
+              onPress={navigateToHome}
+            >
+              Entrar
+            </Button>
+          )}
+          <RectButton
+            style={styles.buttonRegister}
+            onPress={navigateToRegister}
           >
-            Entrar
-          </Button>
-        )}
-        <RectButton style={styles.buttonRegister} onPress={navigateToRegister}>
-          <Text style={styles.titleRegister}>CRIAR UMA CONTA</Text>
-        </RectButton>
-      </View>
-    </KeyboardAvoidingView>
+            <Text style={styles.titleRegister}>CRIAR UMA CONTA</Text>
+          </RectButton>
+        </View>
+      </KeyboardAvoidingView>
+    </>
   );
 }

@@ -5,10 +5,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#19062b",
     alignItems: "center",
+    alignContent: 'center',
     padding: 40,
   },
   banner: {
-    width: "100%",
+    width: "10%",
     resizeMode: "contain",
   },
   titlePrimary: {
