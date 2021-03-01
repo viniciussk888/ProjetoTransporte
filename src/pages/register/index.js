@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextInput, View, Text } from "react-native";
+import { TextInput, View, Text,ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RadioButton, Button } from "react-native-paper";
 
@@ -8,33 +8,54 @@ import Header from "../../components/header";
 import styles from "./styles";
 import { RectButton } from "react-native-gesture-handler";
 import Motora from "../../assets/images/motora.svg";
+import { cpfMask } from "../../utils/cpfMask";
+import { cnpjMask } from "../../utils/cnpjMask";
+import { phoneMask } from "../../utils/phoneMask";
+import { dateMask } from "../../utils/dateMask";
 
 export default function Register() {
   const { navigate } = useNavigation();
 
   const [checked, setChecked] = useState("PF");
+  const [cpfCnpj, setCpfCnpj] = useState("");
+  const [birthDate, setBirthDate] = useState("");
+  const [whatsapp, setWhatsapp] = useState("");
 
   function navigateToVehicleRegister() {
     navigate("vehicle");
+  }
+  function mask(typeMask){
+    if(typeMask==="cpf"){
+      setCpfCnpj(cpfMask(cpfCnpj))
+    }else if(typeMask==="cnpj"){
+      setCpfCnpj(cnpjMask(cpfCnpj))
+    }else if(typeMask==='phone'){
+      setWhatsapp(phoneMask(whatsapp))
+    }else if(typeMask==='date'){
+      setBirthDate(dateMask(birthDate))
+    }
   }
 
   return (
     <>
       <Header routeToBack="login" title="Informe os dados" />
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <Motora width="100%" height="180" />
         <View style={styles.buttonsContainer}>
           <TextInput
             keyboardType="default"
-            placeholder="Nome"
+            placeholder={checked === "PJ" ? "Razão Social" : "Nome"}
             placeholderTextColor="#000"
             style={styles.input}
           />
           <TextInput
             keyboardType="numeric"
-            placeholder="Celular"
+            placeholder="Whatsapp"
             placeholderTextColor="#000"
+            value={whatsapp}
             style={styles.input}
+            onChangeText={(text) => setWhatsapp(text)}
+            onEndEditing={()=>mask('phone')}
           />
           <TextInput
             placeholder="Senha"
@@ -68,12 +89,40 @@ export default function Register() {
             <Text style={{ fontWeight: "bold" }}>PJ</Text>
           </View>
 
+          {checked === "PJ" ? 
           <TextInput
             keyboardType="numeric"
-            placeholder={checked === "PJ" ? "CNPJ" : "CPF"}
+            value={cpfCnpj}
+            placeholder={'CNPJ'}
             placeholderTextColor="#000"
             style={styles.input}
+            onChangeText={(text) => setCpfCnpj(text)}
+            onEndEditing={()=>mask('cnpj')}
           />
+           : 
+           <TextInput
+            keyboardType="numeric"
+            value={cpfCnpj}
+            placeholder={'CPF'}
+            placeholderTextColor="#000"
+            style={styles.input}
+            onChangeText={(text) => setCpfCnpj(text)}
+            onEndEditing={()=>mask('cpf')}
+          />
+           }    
+
+          {checked==="PF"? 
+          <TextInput
+            keyboardType="default"
+            placeholder="Data de nascimento"
+            placeholderTextColor="#000"
+            style={styles.input}
+            value={birthDate}
+            onChangeText={(text) => setBirthDate(text)}
+            onEndEditing={()=>mask('date')}
+          />:
+          null
+          }
         </View>
 
         <View style={styles.buttonsContainer}>
@@ -97,7 +146,7 @@ export default function Register() {
             </Text>
           </RectButton>
         </View>
-      </View>
+      </ScrollView>
     </>
   );
 }

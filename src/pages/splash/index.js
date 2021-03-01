@@ -57,5 +57,5 @@ export default function Splash() {
       <TitleText>Transporta Ai!</TitleText>
       <LoadingIcon size="large" color="#fff" />
     </Container>
-  );
+    );
 }
