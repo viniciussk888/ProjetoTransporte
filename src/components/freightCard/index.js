@@ -15,27 +15,29 @@ export default function FreightCard(props) {
 
       <View style={styles.cardInfo}>
         <Text style={styles.cardInfoText}>
+          <AntDesign name="solution1" size={24} color="#fff" /> BUNGE ALIMENTOS
+          LTDA
+        </Text>
+
+        <Text style={styles.cardInfoText}>
           <MaterialCommunityIcons
     name="truck-delivery"
     size={24}
     color="#fff"
-    />{" "}
+    />
+    {"Carga: "}
           Milho
-        </Text>
-        <Text style={styles.cardInfoText}>
-          <AntDesign name="solution1" size={24} color="#fff" /> BUNGE ALIMENTOS
-          LTDA
         </Text>
       </View>
 
       <View style={styles.cardInfo}>
-        <Text style={styles.cardInfoText}>
-          <MaterialIcons name="attach-money" size={24} color="#fff" /> 130,00
-          p/t
-        </Text>
         <RectButton>
           <Text style={styles.cardInfoTextDetail}>VER DETALHES</Text>
         </RectButton>
+        <Text style={styles.cardInfoText}>
+          <MaterialIcons name="attach-money" size={24} color="#fff" />{'Valor: '} 130,00
+          p/t
+        </Text>
       </View>
     </View>
   </RectButton>
@@ -60,12 +62,12 @@ const styles = StyleSheet.create({
   },
   cardOrigin: {
     fontFamily: 'Archivo_700Bold',
-    fontSize: 18,
+    fontSize: 16,
     color: '#fff',
     marginRight: 10,
   },
   cardDest: {
-    fontSize: 18,
+    fontSize: 16,
     color: '#fff',
     marginLeft: 10,
     fontFamily: 'Archivo_700Bold',
@@ -78,13 +80,13 @@ const styles = StyleSheet.create({
   },
   cardInfoText: {
     fontFamily: 'Poppins_600SemiBold',
-    fontSize: 14,
+    fontSize: 10,
     color: '#fff',
     margin: 5
   },
   cardInfoTextDetail: {
     fontFamily: 'Archivo_700Bold',
-    fontSize: 18,
+    fontSize: 16,
     color: '#fff',
     margin: 5
   }
