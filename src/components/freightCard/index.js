@@ -2,8 +2,16 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { FontAwesome, MaterialCommunityIcons, AntDesign, MaterialIcons, } from "@expo/vector-icons";
 import { RectButton } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
 
 export default function FreightCard(props) {
+  //navegação
+  const {navigate} = useNavigation();
+
+  function navigateToDetails() {
+    navigate("freightDetails");
+  }
+
   return (
     <RectButton>
     <View style={styles.item}>
@@ -31,7 +39,7 @@ export default function FreightCard(props) {
       </View>
 
       <View style={styles.cardInfo}>
-        <RectButton>
+        <RectButton onPress={navigateToDetails}>
           <Text style={styles.cardInfoTextDetail}>VER DETALHES</Text>
         </RectButton>
         <Text style={styles.cardInfoText}>

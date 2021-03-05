@@ -5,8 +5,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#19062b",
     justifyContent: "center",
-    padding: 40,
+    padding: 0,
   },
+  text: {
+    marginTop: 5,
+    fontSize: 16,
+    fontFamily: "Archivo_700Bold",
+    color: "#fff"
+  }
 });
 
 export default styles;
