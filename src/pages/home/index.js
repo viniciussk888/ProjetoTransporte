@@ -13,9 +13,9 @@ import { useSelector } from "react-redux";
 import FreightCard from '../../components/freightCard'
 import styles from "./styles";
 
+import Search from "../../assets/images/search.svg";
+
 export default function Home() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const onChangeSearch = (query) => setSearchQuery(query);
 
   const config = {
     headers: { Authorization: `Bearer ${useSelector((state) => state.token)}` },
@@ -27,17 +27,20 @@ export default function Home() {
     return firstName;
   }
 
+  function navigateToSearch(){
+    alert("navegou")
+  }
+
   return (
     <>
       <View style={styles.headerHomeContainer}>
         <Text style={styles.wellcomeText}>
           Bem vindo, {getSimpleName(useSelector((state) => state.name))}
         </Text>
-        <Searchbar
-          placeholder="Buscar fretes..."
-          onChangeText={onChangeSearch}
-          value={searchQuery}
-        />
+        <View style={{flexDirection:"column",alignItems:'center'}}>
+        <FontAwesome onPress={navigateToSearch} name="search" size={26} color="#fff" />
+        <Text style={{fontSize:14,color:"#fff"}}>Buscar</Text>
+        </View>
       </View>
 
       <SafeAreaView style={styles.container}>

@@ -7,6 +7,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   headerHomeContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 20,
     paddingVertical: 30,
     backgroundColor: '#19062b'

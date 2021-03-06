@@ -29,7 +29,7 @@ export default function Vehicle() {
     <>
       <Header routeToBack="register" title="Dados do veículo" />
       <View style={styles.container}>
-        <Truck width="100%" height="100" />
+        <Truck width="100%" height="180" />
         <View style={styles.buttonsContainer}>
           <Text style={styles.sectionText}>Cavalo</Text>
 
