@@ -4,7 +4,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#afb7bd",
-    padding: 20,
+    padding: 10,
   },
   sectionText: {
     fontFamily: "Archivo_700Bold",

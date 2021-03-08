@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#19062b",
     justifyContent: "center",
-    padding: 0,
+    padding: 20,
   },
   text: {
     marginTop: 5,

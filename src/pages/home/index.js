@@ -1,21 +1,17 @@
 import React, { useState } from "react";
 import { Text, View, ScrollView, SafeAreaView } from "react-native";
-import { Searchbar } from "react-native-paper";
-import { RectButton } from "react-native-gesture-handler";
 import {
-  FontAwesome,
-  MaterialCommunityIcons,
-  AntDesign,
-  MaterialIcons,
+  FontAwesome
 } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 
 import FreightCard from '../../components/freightCard'
 import styles from "./styles";
 
-import Search from "../../assets/images/search.svg";
 
 export default function Home() {
+  const {navigate} = useNavigation();
 
   const config = {
     headers: { Authorization: `Bearer ${useSelector((state) => state.token)}` },
@@ -28,7 +24,7 @@ export default function Home() {
   }
 
   function navigateToSearch(){
-    alert("navegou")
+    navigate("search");
   }
 
   return (
@@ -39,7 +35,7 @@ export default function Home() {
         </Text>
         <View style={{flexDirection:"column",alignItems:'center'}}>
         <FontAwesome onPress={navigateToSearch} name="search" size={26} color="#fff" />
-        <Text style={{fontSize:14,color:"#fff"}}>Buscar</Text>
+        <Text style={{fontSize:12,color:"#fff",fontFamily:"Poppins_600SemiBold"}}>Buscar fretes</Text>
         </View>
       </View>
 

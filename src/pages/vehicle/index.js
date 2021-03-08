@@ -6,7 +6,6 @@ import { RadioButton, Button } from "react-native-paper";
 import Header from "../../components/header";
 
 import styles from "./styles";
-import { RectButton } from "react-native-gesture-handler";
 import { Picker } from "@react-native-picker/picker";
 import Truck from "../../assets/images/truck.svg";
 
@@ -29,7 +28,7 @@ export default function Vehicle() {
     <>
       <Header routeToBack="register" title="Dados do veículo" />
       <View style={styles.container}>
-        <Truck width="100%" height="180" />
+        <Truck width="100%" height="150" />
         <View style={styles.buttonsContainer}>
           <Text style={styles.sectionText}>Cavalo</Text>
 
