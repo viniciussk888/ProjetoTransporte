@@ -38,7 +38,54 @@ const styles = StyleSheet.create({
   textSection: {
     color: '#fff',
     fontFamily: "Poppins_600SemiBold"
-  }
+  },
+  inputShort: {
+    borderRadius: 8,
+    width: "50%",
+    fontFamily: "Archivo_400Regular",
+    fontSize: 20,
+    height: 44,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: "#000",
+    backgroundColor: "#fff",
+    marginRight: 5,
+  },
+  PickerView: {
+    width: "100%",
+    marginVertical: 10,
+    borderWidth: 1,
+    borderColor: "#000",
+    backgroundColor: "#fff",
+  },
+  picker: {
+    width: "100%",
+    fontFamily: "Archivo_400Regular",
+    fontSize: 20,
+    height: 40,
+    backgroundColor: "#fff",
+  },
+  PickerView2: {
+    width: "50%",
+    borderWidth: 1,
+    borderColor: "#000",
+    backgroundColor: "#fff",
+    marginBottom: 40
+  },
+  picker2: {
+    width: "100%",
+    fontFamily: "Archivo_400Regular",
+    fontSize: 20,
+    height: 40,
+    backgroundColor: "#fff",
+  },
+  radioContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  buttonShort: {
+    flexDirection: "row",
+  },
 });
 
 export default styles;
