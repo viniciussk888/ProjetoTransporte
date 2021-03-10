@@ -2,46 +2,26 @@ import React, { useEffect, useContext } from "react";
 import { Container, LoadingIcon, TitleText } from "./styles";
 //import AsyncStorage from '@react-native-community/async-storage';
 import { useNavigation } from "@react-navigation/native";
-
-//import Api from '../../Api';
-//import { UserContext } from '../../contexts/UserContext';
+import { requestPermissionsAsync } from "expo-location";
 
 import LogoApp from "../../assets/images/logo-transp.svg";
 
 export default function Splash() {
-  //const {dispatch: userDispatch} = useContext(UserContext); //dispatch(renomeado para userDispatch) constante para enviar informações para Context
   const navigation = useNavigation();
 
+  async function getLocationPermission() {
+    const {granted} = await requestPermissionsAsync();
+
+    if (granted) {
+      console.log("Permissão de localização concedida!")
+    } else {
+      alert("O APP precisa de acesso a localização para inicializar!")
+      Splash();
+    }
+  }
+
   useEffect(() => {
-    // const checkToken = async () => {
-    //   const token = await AsyncStorage.getItem('token')
-    //   if (token) {
-    //     let res = await Api.checkToken(token)
-    //     if (res.token) {
-
-    //       await AsyncStorage.setItem('token', res.token) //Salva token no async storage
-
-    //       userDispatch({
-    //         type: 'setAvatar', //ação definida no reducer
-    //         payload: {
-    //           avatar: res.data.avatar //avatar que será salvo no context
-    //         }
-    //       })
-
-    //       navigation.reset({ //impede usuário voltar para tela login
-    //         routes: [{
-    //           name: 'MainTab'
-    //         }]
-    //       })
-
-    //     } else {
-    //       navigation.navigate('SignIn')
-    //     }
-    //   } else {
-    //     navigation.navigate('SignIn')
-    //   }
-    // }
-    // checkToken()
+    getLocationPermission();
     splash();
   }, []);
 

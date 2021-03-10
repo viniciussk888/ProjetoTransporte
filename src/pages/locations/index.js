@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, SafeAreaView } from "react-native";
 import MapView, { Marker, Callout } from "react-native-maps";
-import { requestPermissionsAsync, getCurrentPositionAsync, } from "expo-location";
+import { getCurrentPositionAsync, } from "expo-location";
 
 import styles from "./styles";
 
@@ -12,9 +12,6 @@ function Locations() {
 
   useEffect(() => {
     async function loadInitialPosition() {
-      const { granted } = await requestPermissionsAsync();
-
-      if (granted) {
         const { coords } = await getCurrentPositionAsync({
           enableHighAccuracy: true,
         });
@@ -27,9 +24,6 @@ function Locations() {
           latitudeDelta: 0.01,
           longitudeDelta: 0.01,
         });
-      } else {
-        alert("Essa função exige permissão de localização!");
-      }
     }
     loadInitialPosition();
   }, []);
