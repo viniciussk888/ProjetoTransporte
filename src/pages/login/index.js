@@ -10,12 +10,10 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { RectButton } from "react-native-gesture-handler";
 import { Button, ActivityIndicator, Colors } from "react-native-paper";
-
 import api from "../../services/api";
-
 import styles from "./styles";
-
-import LogoApp from "../../assets/images/logo-transp.svg";
+import TruckAnimation from "../../assets/animations/truck.json";
+import Lottie from "lottie-react-native";
 import { useDispatch } from "react-redux";
 
 export default function Login() {
@@ -80,7 +78,13 @@ export default function Login() {
         behavior={Platform.OS == "ios" ? "padding" : "height"}
         style={styles.container}
       >
-        <LogoApp width="100%" height="260" />
+        <Lottie
+          source={TruckAnimation}
+          autoPlay
+          loop
+          resizeMode="contain"
+          autoSize
+        />
 
         <View style={styles.titleContainer}>
           <Text style={styles.titlePrimary}>Seja bem-vindo</Text>

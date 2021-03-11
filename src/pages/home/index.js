@@ -3,19 +3,15 @@ import { Text, View, ScrollView, SafeAreaView } from "react-native";
 import {
   FontAwesome
 } from "@expo/vector-icons";
-import { useSelector } from "react-redux";
+import Token from '../../utils/Token'
 import { useNavigation } from "@react-navigation/native";
-
 import FreightCard from '../../components/freightCard'
 import styles from "./styles";
+import { useSelector } from "react-redux";
 
 
 export default function Home() {
   const {navigate} = useNavigation();
-
-  const config = {
-    headers: { Authorization: `Bearer ${useSelector((state) => state.token)}` },
-  };
 
   function getSimpleName(fullName) {
     const name = fullName.split(" ");

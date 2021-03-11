@@ -15,8 +15,8 @@ function FreightDetails() {
         const { coords } = await getCurrentPositionAsync({
           enableHighAccuracy: true,
         });
-
-        const { latitude, longitude } = coords;
+        if(coords){
+          const { latitude, longitude } = coords;
 
         setCurrentRegion({
           latitude,
@@ -24,7 +24,9 @@ function FreightDetails() {
           latitudeDelta: 0.10,
           longitudeDelta: 0.10,
         });
-      
+        }else{
+          alert("Para esta funcionalidade ative a LOCALIZAÇÃO e abre o app novamente!")
+        } 
     }
     loadInitialPosition();
   }, []);
