@@ -2,6 +2,7 @@ const INITIAL_STATE = {
   token: '',
   id: '',
   name: '',
+  profileURL: '',
   auth: 0,
 };
 
@@ -13,6 +14,7 @@ function userReducer(state = INITIAL_STATE, action) {
         token: action.token,
         id: action.id,
         name: action.name,
+        profileURL: action.profileURL,
         auth: 1
       };
     case 'LOG_OUT':
@@ -21,7 +23,7 @@ function userReducer(state = INITIAL_STATE, action) {
         token: null,
         id: null,
         name: null,
-        profileUrl: null,
+        profileURL: null,
         auth: 0
       };
     default:

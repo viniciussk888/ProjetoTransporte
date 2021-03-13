@@ -63,6 +63,8 @@ function FreightDetails() {
         </View>
         </View>
 
+          <Text style={styles.text}>Bunge Alimentos LTDA</Text>
+          
           <Text style={styles.text}>Origem: Balsas-MA</Text>
           <Text style={styles.text}>Destino: Imperatiz-MA</Text>
           

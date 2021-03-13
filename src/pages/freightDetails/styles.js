@@ -11,7 +11,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 16,
     fontFamily: "Archivo_700Bold",
-    color: "#fff"
+    color: "#fff",
+    textShadowColor: '#9999',
+    textShadowOffset: {
+      width: 5,
+      height: 5
+    },
+    textShadowRadius: 10,
   },
   textRoute: {
     fontSize: 16,

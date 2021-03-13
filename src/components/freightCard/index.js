@@ -73,12 +73,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#fff',
     marginRight: 10,
+    textShadowColor: '#000',
+    textShadowOffset: {
+      width: 5,
+      height: 5
+    },
+    textShadowRadius: 10,
   },
   cardDest: {
     fontSize: 16,
     color: '#fff',
     marginLeft: 10,
     fontFamily: 'Archivo_700Bold',
+    textShadowColor: '#000',
+    textShadowOffset: {
+      width: 5,
+      height: 5
+    },
+    textShadowRadius: 10,
   },
   cardInfo: {
     fontFamily: 'Poppins_600SemiBold',
@@ -90,12 +102,24 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_600SemiBold',
     fontSize: 10,
     color: '#fff',
+    textShadowColor: '#000',
+    textShadowOffset: {
+      width: 5,
+      height: 5
+    },
+    textShadowRadius: 10,
     margin: 5
   },
   cardInfoTextDetail: {
     fontFamily: 'Archivo_700Bold',
     fontSize: 16,
     color: '#fff',
+    textShadowColor: '#000',
+    textShadowOffset: {
+      width: 5,
+      height: 5
+    },
+    textShadowRadius: 10,
     margin: 5
   }
 });
