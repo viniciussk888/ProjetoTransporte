@@ -21,8 +21,8 @@ function Locations() {
         setCurrentRegion({
           latitude,
           longitude,
-          latitudeDelta: 0.01,
-          longitudeDelta: 0.01,
+          latitudeDelta: 0.008,
+          longitudeDelta: 0.008,
         });
     }
     loadInitialPosition();
@@ -58,9 +58,14 @@ function Locations() {
 
         </View>
         <MapView
-          onRegionChangeComplete={handleRegionChanged}
-          initialRegion={currentRegion}
-          style={styles.map}>
+        showsUserLocation
+        loadingEnabled
+        zoomEnabled={false}
+        showsBuildings={false}
+        showsPointsOfInterest={false}
+        onRegionChangeComplete={handleRegionChanged}
+        initialRegion={currentRegion}
+        style={styles.map}>
           <Marker
             coordinate={{
               latitude: -7.525774,

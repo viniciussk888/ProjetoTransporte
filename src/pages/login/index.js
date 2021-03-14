@@ -3,7 +3,6 @@ import {
   Alert,
   Text,
   View,
-  Image,
   TextInput,
   KeyboardAvoidingView,
 } from "react-native";
@@ -19,7 +18,7 @@ import { useDispatch } from "react-redux";
 export default function Login() {
   //variaveis
   const [loading, setLoading] = useState(false);
-  const [document, setDocument] = useState("");
+  const [cpf_cnpj, setCpf_cnpj] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
 
@@ -36,14 +35,14 @@ export default function Login() {
   //funções
   async function signin() {
     setLoading(true);
-    if (document === "" || password === "") {
+    if (cpf_cnpj === "" || password === "") {
       alert("Preencha todas as credenciais de acesso!");
       setLoading(false);
       return;
     }
     try {
       const response = await api.post("sessions", {
-        document,
+        cpf_cnpj,
         password,
       });
       if (response.data.token !== null || response.data.token !== "") {
@@ -52,7 +51,7 @@ export default function Login() {
           token: response.data[0].token,
           id: response.data[1].id,
           name: response.data[1].name,
-          profileUrl: response.data[1].profileUrl,
+          profileURL: response.data[1].profileURL,
           auth: 1,
         });
         setLoading(false);
@@ -97,8 +96,8 @@ export default function Login() {
           placeholderTextColor="#000"
           keyboardType="numeric"
           placeholder="CPF ou CNPJ"
-          value={document}
-          onChangeText={(text) => setDocument(text)}
+          value={cpf_cnpj}
+          onChangeText={(text) => setCpf_cnpj(text)}
           maxLength={14}
           style={styles.input}
         />
@@ -123,7 +122,7 @@ export default function Login() {
               style={styles.buttonSignin}
               color="#eb001b"
               mode="contained"
-              onPress={navigateToHome}
+              onPress={signin}
             >
               Entrar
             </Button>

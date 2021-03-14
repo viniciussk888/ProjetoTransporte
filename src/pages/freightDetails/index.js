@@ -47,6 +47,10 @@ function FreightDetails() {
             </View>
             
         <MapView
+        loadingEnabled
+        zoomEnabled={false}
+        showsBuildings={false}
+        showsPointsOfInterest={false}
         onRegionChangeComplete={handleRegionChanged}
         initialRegion={currentRegion}
         style={styles.map}
