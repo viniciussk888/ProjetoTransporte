@@ -18,7 +18,7 @@ import { useDispatch } from "react-redux";
 export default function Login() {
   //variaveis
   const [loading, setLoading] = useState(false);
-  const [cpf_cnpj, setCpf_cnpj] = useState("");
+  const [document, setDocument] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
 
@@ -35,14 +35,14 @@ export default function Login() {
   //funções
   async function signin() {
     setLoading(true);
-    if (cpf_cnpj === "" || password === "") {
+    if (document === "" || password === "") {
       alert("Preencha todas as credenciais de acesso!");
       setLoading(false);
       return;
     }
     try {
       const response = await api.post("sessions", {
-        cpf_cnpj,
+        document,
         password,
       });
       if (response.data.token !== null || response.data.token !== "") {
@@ -96,8 +96,8 @@ export default function Login() {
           placeholderTextColor="#000"
           keyboardType="numeric"
           placeholder="CPF ou CNPJ"
-          value={cpf_cnpj}
-          onChangeText={(text) => setCpf_cnpj(text)}
+          value={document}
+          onChangeText={(text) => setDocument(text)}
           maxLength={14}
           style={styles.input}
         />

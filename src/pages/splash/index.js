@@ -1,30 +1,53 @@
 import React, { useEffect } from "react";
 import { Container, LoadingIcon, TitleText } from "./styles";
-//import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-community/async-storage';
 import { useNavigation } from "@react-navigation/native";
-import { requestPermissionsAsync } from "expo-location";
+import { requestPermissionsAsync, getCurrentPositionAsync } from "expo-location";
 import { BackHandler, Alert } from "react-native";
-import Auth from "../../utils/Auth";
-import Token from "../../utils/Token";
+import {useSelector } from "react-redux";
 
 import TruckAnimation from "../../assets/animations/truck.json";
 import Lottie from "lottie-react-native";
 
 export default function Splash() {
   const navigation = useNavigation();
+  const auth = useSelector((state) => state.auth);
+
+  async function getLocation(){
+    try {
+      const { coords } = await getCurrentPositionAsync({
+        enableHighAccuracy: true,
+      });
+      const { latitude, longitude } = coords;
+      await AsyncStorage.setItem('latitude', latitude.toString());
+      await AsyncStorage.setItem('longitude', longitude.toString());
+      
+    } catch (error) {
+      Alert.alert(
+        "Atenção",
+        "Ocorreu um erro ao obter a sua localização!",
+        [
+          {
+            text: "OK",
+            onPress: () => BackHandler.exitApp(),
+          },
+        ]
+      );
+    }
+  }
 
   async function getLocationPermission() {
     const { granted } = await requestPermissionsAsync();
 
     if (granted) {
-      console.log("Permissão de localização concedida!");
+      getLocation();
     } else {
       Alert.alert(
         "Atenção",
         "O App precisa de permissão de localização para inicializar!",
         [
           {
-            text: "SIM",
+            text: "OK",
             onPress: () => BackHandler.exitApp(),
           },
         ]
@@ -33,10 +56,12 @@ export default function Splash() {
   }
 
   function checkAuth() {
-    if (Token && Auth === 1) {
+    if (auth === 1) {
       navigation.navigate("Main");
     } else {
-      splash();
+      setTimeout(() => {
+        navigation.navigate("login");
+      }, 1000);
     }
   }
 
@@ -44,12 +69,6 @@ export default function Splash() {
     getLocationPermission();
     checkAuth();
   }, []);
-
-  function splash() {
-    setTimeout(() => {
-      navigation.navigate("login");
-    }, 5000);
-  }
 
   return (
     <Container>

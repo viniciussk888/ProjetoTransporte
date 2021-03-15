@@ -4,8 +4,11 @@ import styles from "./styles";
 import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons'
 import { RectButton } from 'react-native-gesture-handler';
 import { Button, RadioButton } from "react-native-paper";
+import { useDispatch } from "react-redux";
 
 function Profile() {
+  const dispatch = useDispatch();
+  const { navigate } = useNavigation();
   const [editPessoal, setEditPessoal] = useState(false)
   const [editPessoalColor, setEditPessoalColor] = useState("#FFF")
   const [editVehicleColor, setEditVehicleColor] = useState("#FFF")
@@ -30,6 +33,15 @@ function Profile() {
     setEditVehicle(!editVehicle)
   }
 
+  function navigateToLogin() {
+    navigate("login");
+  }
+function logout(){
+  dispatch({
+    type: "LOG_OUT"
+  });
+  navigateToLogin();
+}
   return (
     <ScrollView style={styles.container}>
       <View style={{
@@ -39,6 +51,7 @@ function Profile() {
       <Button
     color="#eb001b"
     mode="contained"
+    onPress={logout}
     >
             Sair
           </Button>

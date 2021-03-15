@@ -27,7 +27,7 @@ export default function Home() {
     <>
       <View style={styles.headerHomeContainer}>
         <Text style={styles.wellcomeText}>
-          Bem vindo, {getSimpleName(useSelector((state) => state.name))}
+          Bem vindo, {getSimpleName(useSelector((state) => state.name)||"Usuário")}
         </Text>
         <View style={{flexDirection:"column",alignItems:'center'}}>
         <FontAwesome onPress={navigateToSearch} name="search" size={26} color="#fff" />
