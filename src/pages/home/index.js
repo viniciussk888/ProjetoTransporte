@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { Text, View, ScrollView, SafeAreaView } from "react-native";
 import {
   FontAwesome
 } from "@expo/vector-icons";
-import Token from '../../utils/Token'
 import { useNavigation } from "@react-navigation/native";
 import FreightCard from '../../components/freightCard'
 import styles from "./styles";
 import { useSelector } from "react-redux";
+import AsyncStorage from "@react-native-community/async-storage";
 
 
 export default function Home() {
@@ -22,6 +22,18 @@ export default function Home() {
   function navigateToSearch(){
     navigate("search");
   }
+
+  useEffect(()=>{
+    let lat
+    let long
+    async function getCoords(){
+      lat =  await AsyncStorage.getItem("latitude")
+      long = await AsyncStorage.getItem("longitude")
+    }
+    getCoords()
+    console.log(lat+" "+long)
+  },[])
+  
 
   return (
     <>
@@ -42,10 +54,6 @@ export default function Home() {
         </View>
 
         <ScrollView>
-          <FreightCard/>
-          <FreightCard/>
-          <FreightCard/>
-          <FreightCard/>
           <FreightCard/>
         </ScrollView>
       </SafeAreaView>

@@ -23,13 +23,17 @@ export default function Login() {
   const dispatch = useDispatch();
 
   //navegação
-  const { navigate } = useNavigation();
+  const navigation = useNavigation();
 
   function navigateToHome() {
-    navigate("Main");
+    navigation.reset({
+      routes: [{
+        name: 'Main'
+      }]
+    })
   }
   function navigateToRegister() {
-    navigate("register");
+    navigation.navigate("register");
   }
 
   //funções

@@ -5,10 +5,11 @@ import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons'
 import { RectButton } from 'react-native-gesture-handler';
 import { Button, RadioButton } from "react-native-paper";
 import { useDispatch } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 
 function Profile() {
   const dispatch = useDispatch();
-  const { navigate } = useNavigation();
+  const navigation = useNavigation();
   const [editPessoal, setEditPessoal] = useState(false)
   const [editPessoalColor, setEditPessoalColor] = useState("#FFF")
   const [editVehicleColor, setEditVehicleColor] = useState("#FFF")
@@ -34,7 +35,11 @@ function Profile() {
   }
 
   function navigateToLogin() {
-    navigate("login");
+    navigation.reset({
+      routes: [{
+        name: 'login'
+      }]
+    })
   }
 function logout(){
   dispatch({

@@ -1,17 +1,26 @@
-import React, { useState } from "react";
-import { TextInput, View, Text } from "react-native";
+import React, { useState, useEffect } from "react";
+import { TextInput, View, Text,Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { RadioButton, Button } from "react-native-paper";
-
-import Header from "../../components/header";
-
+import { RadioButton, Button,ActivityIndicator, Colors } from "react-native-paper";
+import api from '../../services/api'
 import styles from "./styles";
 import { Picker } from "@react-native-picker/picker";
 import Truck from "../../assets/images/truck.svg";
+import AsyncStorage from "@react-native-community/async-storage";
 
 export default function Vehicle() {
-  const { navigate } = useNavigation();
-  const [checked, setChecked] = useState("Próprio");
+  const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
+  
+  const [user_id, setUser_id] = useState("");
+  const [board, setBoard] = useState("");
+  const [rntrc, setRntrc] = useState("");
+ // const [type, setType] = useState("");
+  const [checked, setChecked] = useState("Próprio");//property
+  const [board_cart, setBoard_cart] = useState("");
+ // const [type_cart, setType_cart] = useState("");
+  const [photoURL, setPhotoURL] = useState("");
+
 
   const [stateVehicle, setStateVehicle] = useState({
     vehicle: "Selecione",
@@ -20,13 +29,66 @@ export default function Vehicle() {
     carreta: "Selecione",
   });
 
-  // function navigateToLogin() {
-  // navigate('login')
-  // }
+  function navigateToLogin() {
+  // navigation.navigate('login')
+   navigation.reset({ 
+    routes: [{
+      name: 'login'
+    }]
+  })
+   }
+
+   function confirmRegister(){
+    Alert.alert(
+      "ATENÇÃO",
+      "Confirma o cadastro do veiculo com os dados informados?",
+      [
+        {
+          text: "Cancelar",
+          onPress: () => console.log("Cancel register"),
+          style: "cancel"
+        },
+        { text: "Sim", onPress: () => registerNewVehicle() }
+      ]
+    );
+  }
+
+  async function registerNewVehicle(){
+    setLoading(true)
+    if(user_id===""||board===""||rntrc===""||stateVehicle==="Selecione"||board_cart===""||stateCarreta==="Selecione"){
+      setLoading(false)
+      return alert("INFORME TODOS OS DADOS DO VEICULO!")
+    }
+    try {
+      const response = api.post("vehicle",{
+        user_id,
+        board,
+        rntrc,
+        type:stateVehicle.vehicle,
+        property:checked,
+        board_cart,
+        type_cart:stateCarreta.carreta,
+        photoURL
+      })
+      setLoading(false)
+      alert("Dados cadastrados! Faça login na plataforma e aguarde sua aprovação.")
+      navigateToLogin()
+    } catch (error) {
+      console.log(error)
+      setLoading(false)
+    }
+  }
+
+  useEffect( ()=>{
+    async function getRegister_user_id(){
+      const id = await AsyncStorage.getItem("register_user_id");
+      setUser_id(id)
+    }
+    getRegister_user_id()
+  },[])
 
   return (
     <>
-      <Header routeToBack="register" title="Dados do veículo" />
       <View style={styles.container}>
         <Truck width="100%" height="150" />
         <View style={styles.buttonsContainer}>
@@ -38,12 +100,16 @@ export default function Vehicle() {
               placeholder="Placa"
               placeholderTextColor="#000"
               style={styles.inputShort}
+              onChangeText={(text) => setBoard(text)}
+              value={board}
             />
             <TextInput
               keyboardType="numeric"
               placeholder="RNTRC"
               placeholderTextColor="#000"
               style={styles.inputShort}
+              onChangeText={(text) => setRntrc(text)}
+              value={rntrc}
             />
           </View>
           <View style={styles.PickerView}>
@@ -148,6 +214,8 @@ export default function Vehicle() {
               placeholder="Placa"
               placeholderTextColor="#000"
               style={styles.inputShort}
+              onChangeText={(text) => setBoard_cart(text)}
+              value={board_cart}
             />
             <View style={styles.PickerView2}>
               <Picker
@@ -176,9 +244,17 @@ export default function Vehicle() {
         </View>
 
         <View style={styles.buttonsContainer}>
-          <Button style={{ width: "100%" }} color="#eb001b" mode="contained">
+        {loading ? (
+            <ActivityIndicator
+              size="large"
+              animating={true}
+              color={Colors.red800}
+            />
+          ) : (
+          <Button onPress={confirmRegister} style={{ width: "100%" }} color="#eb001b" mode="contained">
             Cadastrar
           </Button>
+          )}
         </View>
       </View>
     </>

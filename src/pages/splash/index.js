@@ -57,10 +57,20 @@ export default function Splash() {
 
   function checkAuth() {
     if (auth === 1) {
-      navigation.navigate("Main");
+      //navigation.navigate("Main");
+      navigation.reset({ //impede usuário voltar para tela login
+        routes: [{
+          name: 'Main'
+        }]
+      })
     } else {
       setTimeout(() => {
-        navigation.navigate("login");
+       // navigation.navigate("login");
+       navigation.reset({ 
+        routes: [{
+          name: 'login'
+        }]
+      })
       }, 1000);
     }
   }
