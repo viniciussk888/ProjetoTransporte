@@ -9,8 +9,6 @@ import Header from "../../components/header";
 import styles from "./styles";
 import { RectButton } from "react-native-gesture-handler";
 import Motora from "../../assets/images/motora.svg";
-import { cpfMask } from "../../utils/cpfMask";
-import { cnpjMask } from "../../utils/cnpjMask";
 import { dateMask } from "../../utils/dateMask";
 import AsyncStorage from "@react-native-community/async-storage";
 
@@ -51,6 +49,7 @@ export default function Register() {
       return alert("INFORME A DATA DE NASCIMENTO!")
     }
     try {
+      setName(name.toUpperCase())
       const response = await api.post('/users',{
         name,
         whatsapp,
@@ -139,7 +138,7 @@ export default function Register() {
           {checked === "PJ" ? 
           <TextInput
             keyboardType="numeric"
-            value={cnpjMask(document)}
+            value={document}
             placeholder={'CNPJ'}
             placeholderTextColor="#000"
             style={styles.input}
@@ -148,7 +147,7 @@ export default function Register() {
            : 
            <TextInput
             keyboardType="numeric"
-            value={cpfMask(document)}
+            value={document}
             placeholder={'CPF'}
             placeholderTextColor="#000"
             style={styles.input}

@@ -60,6 +60,8 @@ export default function Vehicle() {
       return alert("INFORME TODOS OS DADOS DO VEICULO!")
     }
     try {
+      setBoard(board.toUpperCase())
+      setBoard_cart(board_cart.toUpperCase())
       const response = api.post("vehicle",{
         user_id,
         board,
@@ -251,7 +253,11 @@ export default function Vehicle() {
               color={Colors.red800}
             />
           ) : (
-          <Button onPress={confirmRegister} style={{ width: "100%" }} color="#eb001b" mode="contained">
+          <Button 
+          onPress={confirmRegister} 
+          style={{ width: "100%" }} 
+          color="#eb001b" 
+          mode="contained">
             Cadastrar
           </Button>
           )}

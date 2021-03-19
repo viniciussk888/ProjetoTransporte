@@ -1,17 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, ScrollView, SafeAreaView } from "react-native";
 import {
   FontAwesome
 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import FreightCard from '../../components/freightCard'
+import Loading from '../../components/loading'
 import styles from "./styles";
 import { useSelector } from "react-redux";
 import AsyncStorage from "@react-native-community/async-storage";
+import api from '../../services/api'
 
 
 export default function Home() {
   const {navigate} = useNavigation();
+
+  const [freights,setFreights] = useState([])
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${useSelector((state) => state.token)}`,
+    },
+  };
 
   function getSimpleName(fullName) {
     const name = fullName.split(" ");
@@ -24,14 +34,22 @@ export default function Home() {
   }
 
   useEffect(()=>{
-    let lat
-    let long
-    async function getCoords(){
-      lat =  await AsyncStorage.getItem("latitude")
-      long = await AsyncStorage.getItem("longitude")
+    async function getFreights(){
+      try {
+      const lat =  await AsyncStorage.getItem("latitude")
+      const long = await AsyncStorage.getItem("longitude")
+
+        const response = await api.post('region-freights',{
+          latitude:lat,
+          longitude:long
+        },config)
+        setFreights(response.data)
+        console.log(freights)
+      } catch (error) {
+        console.log(error)
+      }
     }
-    getCoords()
-    console.log(lat+" "+long)
+    getFreights()
   },[])
   
 
@@ -54,7 +72,15 @@ export default function Home() {
         </View>
 
         <ScrollView>
-          <FreightCard/>
+          {freights.length>0?
+          freights.map((freight)=>{
+            return(
+              <FreightCard key={freight.id} freight={freight}/>
+            )  
+          })
+          :
+          <Loading/>
+          }
         </ScrollView>
       </SafeAreaView>
     </>
