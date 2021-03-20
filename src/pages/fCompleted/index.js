@@ -10,7 +10,7 @@ function Completed() {
       <ScrollView>
       <Text style={styles.text}>Fretes concluídos: 1</Text>
       <Text style={styles.text}>Nº 4589</Text>
-      <FreightCard />
+      
       </ScrollView>
     </View>
     );

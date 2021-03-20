@@ -16,6 +16,8 @@ export default function Home() {
   const {navigate} = useNavigation();
 
   const [freights,setFreights] = useState([])
+  const [messageNoFreigths,setMessageNoFreigths] = useState('')
+  const [loading,setLoading] = useState(true)
 
   const config = {
     headers: {
@@ -43,8 +45,13 @@ export default function Home() {
           latitude:lat,
           longitude:long
         },config)
+        if(response.status===204){
+          setFreights([])
+          setLoading(false)
+          return setMessageNoFreigths("Nenhum frete encontrado para região!")
+        }
         setFreights(response.data)
-        console.log(freights)
+        setMessageNoFreigths("")
       } catch (error) {
         console.log(error)
       }
@@ -68,10 +75,11 @@ export default function Home() {
       <SafeAreaView style={styles.container}>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <Text style={styles.cargasText}>Cargas disponíveis na região</Text>
-          <Text style={styles.cargasText}>Total: 5</Text>
+          <Text style={styles.cargasText}>Total: {freights.length}</Text>
         </View>
-
+        
         <ScrollView>
+        {messageNoFreigths?<Text style={{marginTop:20,color:"#fff",marginLeft:50}}>{messageNoFreigths}</Text>:null}
           {freights.length>0?
           freights.map((freight)=>{
             return(
@@ -79,7 +87,7 @@ export default function Home() {
             )  
           })
           :
-          <Loading/>
+          <Loading loading={loading}/>
           }
         </ScrollView>
       </SafeAreaView>

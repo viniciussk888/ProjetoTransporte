@@ -8,10 +8,10 @@ function Progress() {
     <View style={styles.container}>
       <ScrollView>
       <Text style={styles.text}>Aguardando aprovação: 1</Text>
-      <FreightCard/>
+      
       <Text style={styles.text}>Fretes em andamento: 1</Text>
       <Text style={styles.text}>Nº 4589</Text>
-      <FreightCard/>
+      
       </ScrollView>
     </View>
     );

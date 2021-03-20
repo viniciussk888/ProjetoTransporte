@@ -17,11 +17,6 @@ function Search() {
     />
     <Text style={styles.text}>Busque por cidade de origem ou cidade de destino</Text>
       <ScrollView>
-      <FreightCard/>
-      <FreightCard/>
-      <FreightCard/>
-      <FreightCard/>
-      <FreightCard/>
       </ScrollView>
     </View>
     </>

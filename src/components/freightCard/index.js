@@ -1,30 +1,46 @@
-import React from 'react';
+import React,{useEffect,useState} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { FontAwesome, MaterialCommunityIcons, AntDesign, MaterialIcons, } from "@expo/vector-icons";
 import { RectButton } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
+import api from '../../services/api'
+
 
 export default function FreightCard(props) {
   //navegação
   const {navigate} = useNavigation();
 
+  const [issuer,setIssuer] = useState([])
+  const freight = props.freight;
+
   function navigateToDetails() {
     navigate("freightDetails");
   }
+  
+  useEffect(()=>{
+   async function getIssuer(){
+try {
+  const response = await api.get(`issuers/${freight.issuer_id}`)
+  setIssuer(response.data)
+} catch (error) {
+  alert(error)
+}
+   }
+   getIssuer()
+  },[])
 
   return (
     <RectButton>
     <View style={styles.item}>
       <View style={styles.cardTop}>
-        <Text style={styles.cardOrigin}>BALSAS-MA</Text>
+        <Text style={styles.cardOrigin}>{freight.city_origin}-{freight.uf_origin}</Text>
         <FontAwesome name="long-arrow-right" size={24} color="#fff" />
-        <Text style={styles.cardDest}>IMPERATRIZ-MA</Text>
+        <Text style={styles.cardDest}>{freight.city_destiny}-{freight.uf_destiny}</Text>
       </View>
 
       <View style={styles.cardInfo}>
         <Text style={styles.cardInfoText}>
-          <AntDesign name="solution1" size={24} color="#fff" /> BUNGE ALIMENTOS
-          LTDA
+          <AntDesign name="solution1" size={24} color="#fff" /> {issuer.name||'Carregando...'}
         </Text>
 
         <Text style={styles.cardInfoText}>
@@ -32,9 +48,8 @@ export default function FreightCard(props) {
     name="truck-delivery"
     size={24}
     color="#fff"
-    />
-    {"Carga: "}
-          Milho
+    />{"  "}
+          {freight.load}
         </Text>
       </View>
 
@@ -43,8 +58,8 @@ export default function FreightCard(props) {
           <Text style={styles.cardInfoTextDetail}>VER DETALHES</Text>
         </RectButton>
         <Text style={styles.cardInfoText}>
-          <MaterialIcons name="attach-money" size={24} color="#fff" />{'Valor: '} 130,00
-          p/t
+          <MaterialIcons name="attach-money" size={24} color="#fff" />{freight.value}{"\n"}
+          {freight.type_value}
         </Text>
       </View>
     </View>
@@ -100,7 +115,7 @@ const styles = StyleSheet.create({
   },
   cardInfoText: {
     fontFamily: 'Poppins_600SemiBold',
-    fontSize: 10,
+    fontSize: 12,
     color: '#fff',
     textShadowColor: '#000',
     textShadowOffset: {
