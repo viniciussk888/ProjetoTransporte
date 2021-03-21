@@ -6,10 +6,10 @@ import { useSelector } from 'react-redux';
 import api from '../../services/api'
 import Loading from '../../components/loading'
 
-function Progress() {
+function Wait() {
   const user_id = useSelector((state) => state.id);
   const [loading,setLoading] = useState(true)
-  const [freightInProgress,setFreightInProgress] = useState([]);
+  const [freightInWait,setFreightInWait] = useState([]);
   const config = {
     headers: {
       Authorization: `Bearer ${useSelector((state) => state.token)}`,
@@ -17,30 +17,27 @@ function Progress() {
   };
 
   useEffect(()=>{
-    async function getFreightInProgress(){
+    async function getFreightInWait(){
       try {
-        const response = await api.get(`user-freights/${user_id}`,config)
-        setFreightInProgress(response.data)
+        const response = await api.get(`user-negotiations/${user_id}`,config)
+        setFreightInWait(response.data)
         setLoading(false)
       } catch (error) {
         setLoading(false)
         alert(error)
       }
     }
-    getFreightInProgress()
+    getFreightInWait()
   },[])
 
   return (
     <View style={styles.container}>
       <ScrollView>
-      <Text style={styles.text}>Fretes em andamento: {freightInProgress.length}</Text>
-      {freightInProgress.length>0?
-          freightInProgress.map((freight)=>{
+      <Text style={styles.text}>Aguardando aprovação: {freightInWait.length}</Text>
+      {freightInWait.length>0?
+          freightInWait.map((freight)=>{
             return(
-              <>
-              <Text style={styles.text}>Nº {freight.id}</Text>
               <FreightCard key={freight.id} freight={freight}/>
-              </>
             )  
           })
           :
@@ -52,4 +49,4 @@ function Progress() {
     );
 }
 
-export default Progress;
+export default Wait;

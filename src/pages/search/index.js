@@ -1,22 +1,62 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import styles from "./styles";
 import FreightCard from '../../components/freightCard';
+import Loading from '../../components/loading'
 import { Searchbar } from "react-native-paper";
 import Header from '../../components/header';
+import api from '../../services/api'
 
 function Search() {
+
+  const [city,setCity] = useState('');
+  const [freights,setFreights] = useState([])
+  const [loading,setLoading] = useState(false)
+
+  async function searchFreights(){
+    setLoading(true)
+    setFreights([])
+    if(city===""||city===null){
+      setLoading(false)
+      return alert("Digite uma cidade para busca!")
+    }
+    try {
+      const response = await api.post('search-freights',{
+        city
+      })
+      if(response.status===204){
+        setLoading(false)
+        return alert("Nenhum frete encontrado para esta localidade!")
+      }
+      setFreights(response.data)
+      setLoading(false)
+    } catch (error) {
+      setLoading(false)
+      alert(error)
+    }
+  }
+
   return (
     <>
     <Header routeToBack="Main" title="Procure por fretes"/>
     <View style={styles.container}>
       <Searchbar
     placeholder="Digite sua busca..."
-    //onChangeText={onChangeSearch}
-    //value={searchQuery}
+    onChangeText={(text) => setCity(text)}
+    onBlur={searchFreights}
+    value={city}
     />
-    <Text style={styles.text}>Busque por cidade de origem ou cidade de destino</Text>
+    <Text style={styles.text}>Busque pelo nome da cidade de origem</Text>
       <ScrollView>
+      {freights.length>0?
+          freights.map((freight)=>{
+            return(
+              <FreightCard key={freight.id} freight={freight}/>
+            )  
+          })
+          :
+          <Loading loading={loading}/>
+          }
       </ScrollView>
     </View>
     </>

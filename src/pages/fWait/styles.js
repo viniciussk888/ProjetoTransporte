@@ -5,11 +5,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#19062b",
     justifyContent: "center",
-    paddingHorizontal: 20,
+    padding: 0,
   },
   text: {
     marginTop: 5,
-    fontSize: 10,
+    fontSize: 16,
     fontFamily: "Archivo_700Bold",
     color: "#fff"
   }
