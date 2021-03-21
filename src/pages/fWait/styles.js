@@ -12,7 +12,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "Archivo_700Bold",
     color: "#fff"
-  }
+  },
+  fab: {
+    backgroundColor:"#eb001b",
+    position: 'absolute',
+    margin: 0,
+    right: 0,
+    bottom: 0,
+  },
 });
 
 export default styles;
