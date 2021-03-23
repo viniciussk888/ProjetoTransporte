@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   },
   text: {
     marginTop: 10,
-    fontSize: 16,
+    fontSize: 12,
     fontFamily: "Archivo_700Bold",
     color: "#fff",
     textShadowColor: '#9999',
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: "100%",
     height: 400,
-    marginBottom: -30,
+    marginBottom: -10,
     backgroundColor: "#fff"
   },
   infoContainer: {

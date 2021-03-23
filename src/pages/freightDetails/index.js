@@ -1,14 +1,45 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, ScrollView } from 'react-native';
-import MapView, { Marker, Callout } from "react-native-maps";
+import { View, Text, ScrollView,Linking } from 'react-native';
+import MapView,{Marker} from "react-native-maps";
 import { getCurrentPositionAsync, } from "expo-location";
 import { Button} from "react-native-paper";
 import {FontAwesome,FontAwesome5} from '@expo/vector-icons'
 import styles from "./styles";
 import Header from '../../components/header';
+import { RectButton } from 'react-native-gesture-handler';
+import Directions from '../../components/directions'
+import getPixelSize from '../../utils/getPixelSize'
 
-function FreightDetails() {
+
+function FreightDetails({ route }) {
+  const [mapView,setMapView] = useState(null)
   const [currentRegion, setCurrentRegion] = useState(null);
+  const freight = route.params.freight;
+  const issuer = route.params.issuer;
+  const origin = {
+    latitude:freight.lat_origin,
+    longitude:freight.long_origin
+  }
+  const destination = {
+    latitude:freight.lat_destiny,
+    longitude:freight.long_destiny
+  }
+  
+  function sendWhatsappMessage(){
+    Linking.openURL(`whatsapp://send?text=Olá, vi seu frete Nº ${freight.id} no App Transporta AI e estou interessado, vamos conversar?&phone=+55${issuer.whatsapp}`);
+  }
+
+  function sendPhoneCall(){
+    let phoneNumber = '';
+
+    if (Platform.OS === 'android') {
+      phoneNumber = `tel:${issuer.phone}`;
+    } else {
+      phoneNumber = `telprompt:${issuer.phone}`;
+    }
+
+    Linking.openURL(phoneNumber);
+  }
 
   useEffect(() => {
     async function loadInitialPosition() {
@@ -54,37 +85,77 @@ function FreightDetails() {
         onRegionChangeComplete={handleRegionChanged}
         initialRegion={currentRegion}
         style={styles.map}
-        />
+        ref={el=>setMapView(el)}
+        >
+          <Directions
+          origin={origin}
+          destination={destination}
+          onReady={(result)=>{
+            mapView.fitToCoordinates(result.coordinates, {
+              edgePadding: {
+                right: getPixelSize(50),
+                bottom: getPixelSize(80),
+                left: getPixelSize(50),
+                top: getPixelSize(10),
+              }
+            });
+          }}
+           />
+           <Marker
+      coordinate={{
+        latitude: parseFloat(freight.lat_origin),
+        longitude: parseFloat(freight.long_origin)
+      }}
+      title={freight.city_origin+"-"+freight.uf_origin}
+      description={"Origem do frete"}
+    />
+    <Marker
+      coordinate={{
+        latitude: parseFloat(freight.lat_destiny),
+        longitude: parseFloat(freight.long_destiny)
+      }}
+      title={freight.city_destiny+"-"+freight.uf_destiny}
+      description={"Destino do frete"}
+    />
+        </MapView>
       </View>
 
       <ScrollView style={styles.infoContainer}>
-        <View style={styles.infoFrete}>
-        <Text style={styles.text}>Frete Nº 1485</Text>
-        <Text style={styles.text}>R$ 117,00 p/t</Text>
+      <View style={styles.infoFrete}>
+      <Text style={styles.text}>Frete Nº {freight.id}</Text>
         <View style={{flexDirection:'row'}}>
-        <FontAwesome5 style={{marginRight:10}} name="whatsapp-square" size={40} color="green" />
-        <FontAwesome name="phone-square" size={43} color="blue" />
+          <RectButton onPress={sendWhatsappMessage}>
+          <FontAwesome5 style={{marginRight:10}} name="whatsapp-square" size={40} color="green" />
+          </RectButton>
+          <RectButton onPress={sendPhoneCall}>
+          <FontAwesome name="phone-square" size={43} color="blue" />
+          </RectButton>
         </View>
+      </View>
+
+        <View style={styles.infoFrete}>
+        
+        <Text style={styles.text}>Valor: R$ {freight.value} {freight.type_value}</Text>
+        
         </View>
 
-          <Text style={styles.text}>Bunge Alimentos LTDA</Text>
+          <Text style={styles.text}>Emitente: {issuer.name}</Text>
           
-          <Text style={styles.text}>Origem: Balsas-MA</Text>
-          <Text style={styles.text}>Destino: Imperatiz-MA</Text>
+          <Text style={styles.text}>Origem: {freight.city_origin+"-"+freight.uf_origin}</Text>
+          <Text style={styles.text}>Destino: {freight.city_destiny+"-"+freight.uf_destiny}</Text>
           
-          <Text style={styles.text}>Endereço: Rua 13 de Maio,Centro, Nº 184</Text>
+          <Text style={styles.text}>Endereço: {freight.adress_destiny}</Text>
 
           <View style={styles.infoFrete}>
-          <Text style={styles.text}>Pedágio: NÃO</Text>
-          <Text style={styles.text}>Valor: R$ 00,00</Text>
+          <Text style={styles.text}>Pedágio: {freight.toll}</Text>
+          <Text style={styles.text}>Valor: R$ {freight.total_value_toll||'00,00'}</Text>
           </View>
 
           <View style={styles.infoFrete}>
-          <Text style={styles.text}>Carga: SOJA</Text>
-          <Text style={styles.text}>Peso: TONELADA</Text>
+          <Text style={styles.text}>Carga: {freight.load}</Text>
           </View>
 
-          <Text style={styles.text}>Obervação: nenhuma observação informada</Text>
+          <Text style={styles.text}>Observação: {freight.obs}</Text>
 
           <Button
           style={{marginTop:20,marginBottom:40}}

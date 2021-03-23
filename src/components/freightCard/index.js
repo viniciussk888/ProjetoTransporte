@@ -14,7 +14,10 @@ export default function FreightCard(props) {
   const freight = props.freight;
 
   function navigateToDetails() {
-    navigate("freightDetails");
+    navigate("freightDetails",{
+      freight:freight,
+      issuer:issuer
+    });
   }
   
   useEffect(()=>{
