@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { TextInput, View, Text,Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RadioButton, Button,ActivityIndicator, Colors } from "react-native-paper";
@@ -6,19 +6,16 @@ import api from '../../services/api'
 import styles from "./styles";
 import { Picker } from "@react-native-picker/picker";
 import Truck from "../../assets/images/truck.svg";
-import AsyncStorage from "@react-native-community/async-storage";
 
-export default function Vehicle() {
+export default function Vehicle({route}) {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
-  
-  const [user_id, setUser_id] = useState("");
+  const  user  = route.params.user;
+
   const [board, setBoard] = useState("");
   const [rntrc, setRntrc] = useState("");
- // const [type, setType] = useState("");
   const [checked, setChecked] = useState("Próprio");//property
   const [board_cart, setBoard_cart] = useState("");
- // const [type_cart, setType_cart] = useState("");
   const [photoURL, setPhotoURL] = useState("");
 
 
@@ -55,39 +52,43 @@ export default function Vehicle() {
 
   async function registerNewVehicle(){
     setLoading(true)
-    if(user_id===""||board===""||rntrc===""||stateVehicle==="Selecione"||board_cart===""||stateCarreta==="Selecione"){
+    if(board===""||rntrc===""||stateVehicle==="Selecione"||board_cart===""||stateCarreta==="Selecione"){
       setLoading(false)
       return alert("INFORME TODOS OS DADOS DO VEICULO!")
     }
     try {
       setBoard(board.toUpperCase())
       setBoard_cart(board_cart.toUpperCase())
-      const response = api.post("vehicle",{
-        user_id,
-        board,
-        rntrc,
-        type:stateVehicle.vehicle,
-        property:checked,
-        board_cart,
-        type_cart:stateCarreta.carreta,
-        photoURL
+      const response = await api.post("users-vechicle",{
+      name:user.name,
+      whatsapp:user.whatsapp,
+      password:user.password,
+      type:user.type,
+      document:user.document,
+      birthDate:user.birthDate,
+      profileURL:user.profileURL,
+      board,
+      rntrc,
+      type_vehicle:stateVehicle.vehicle,
+      property:checked,
+      board_cart,
+      type_cart:stateCarreta.carreta,
+      photoURL
       })
+      if(response.status===226){
+        setLoading(false)
+        Alert.alert("ATENÇÃO",response.data.message)
+      }else if(response.status===201){
+        Alert.alert("ATENÇÃO","Dados cadastrados! Faça login na plataforma e aguarde sua aprovação.")
+        setLoading(false)
+        navigateToLogin()
+      }
       setLoading(false)
-      alert("Dados cadastrados! Faça login na plataforma e aguarde sua aprovação.")
-      navigateToLogin()
     } catch (error) {
       console.log(error)
       setLoading(false)
     }
   }
-
-  useEffect( ()=>{
-    async function getRegister_user_id(){
-      const id = await AsyncStorage.getItem("register_user_id");
-      setUser_id(id)
-    }
-    getRegister_user_id()
-  },[])
 
   return (
     <>

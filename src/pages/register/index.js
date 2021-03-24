@@ -10,7 +10,6 @@ import styles from "./styles";
 import { RectButton } from "react-native-gesture-handler";
 import Motora from "../../assets/images/motora.svg";
 import { dateMask } from "../../utils/dateMask";
-import AsyncStorage from "@react-native-community/async-storage";
 
 export default function Register() {
   const navigation = useNavigation();
@@ -22,7 +21,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [checked, setChecked] = useState("PF");
   const [document, setDocument] = useState("");
-  const [birthDate, setBirthDate] = useState("");
+  const [birthDate, setBirthDate] = useState("Não");
 
   function confirmRegister(){
     Alert.alert(
@@ -50,18 +49,16 @@ export default function Register() {
     }
     try {
       setName(name.toUpperCase())
-      const response = await api.post('/users',{
-        name,
-        whatsapp,
-        password,
-        type:checked,
-        document,
-        birthDate,
+      const response = await api.post('check-users',{
+        document
       })
-      let id = response.data.id;
-      await AsyncStorage.setItem("register_user_id",id.toString())
-      alert("Para finalizar o cadastro informe os dados do veiculo!")
-      navigateToVehicleRegister()
+      if(response.status===200&&response.data.message==="OK"){
+        Alert.alert("ATENÇÃO","Para finalizar o cadastro informe os dados do veiculo!")
+        navigateToVehicleRegister()
+        setLoading(false);
+      }else if(response.status===226){
+        Alert.alert("ATENÇÂO",response.data.message)
+      }
       setLoading(false);
     } catch (error) {
       console.log(error)
@@ -71,12 +68,16 @@ export default function Register() {
   
 
   function navigateToVehicleRegister() {
-   // navigate("vehicle");
-    navigation.reset({ 
-      routes: [{
-        name: 'vehicle'
-      }]
-    })
+    const user = {
+      name,
+      whatsapp,
+      password,
+      type:checked,
+      document,
+      birthDate
+    }
+    console.log(user)
+   navigation.navigate("vehicle",{user:user});
   }
 
   return (

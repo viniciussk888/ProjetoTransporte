@@ -39,7 +39,7 @@ function Completed() {
           freightFinish.map((freight)=>{
             return(
               <>
-              <Text style={styles.text}>Nº {freight.id}</Text>
+              <Text style={styles.text}>Nº {freight.id} - {freight.updated_at} </Text>
               <FreightCard key={freight.id} freight={freight}/>
               </>
             )  

@@ -14,7 +14,6 @@ import api from '../../services/api'
 
 export default function Home() {
   const {navigate} = useNavigation();
-
   const [freights,setFreights] = useState([])
   const [messageNoFreigths,setMessageNoFreigths] = useState('')
   const [loading,setLoading] = useState(true)
