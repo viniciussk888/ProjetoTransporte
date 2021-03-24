@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import { Container, LoadingIcon, TitleText } from "./styles";
+import styles from "./styles";
 import AsyncStorage from '@react-native-community/async-storage';
 import { useNavigation } from "@react-navigation/native";
 import { requestPermissionsAsync, getCurrentPositionAsync } from "expo-location";
-import { BackHandler, Alert } from "react-native";
+import { BackHandler, Alert, SafeAreaView,ActivityIndicator,Text } from "react-native";
 import {useSelector } from "react-redux";
 
 import TruckAnimation from "../../assets/animations/truck.json";
@@ -57,7 +57,6 @@ export default function Splash() {
 
   function checkAuth() {
     if (auth === 1) {
-      //navigation.navigate("Main");
       navigation.reset({ //impede usuário voltar para tela login
         routes: [{
           name: 'Main'
@@ -65,13 +64,12 @@ export default function Splash() {
       })
     } else {
       setTimeout(() => {
-       // navigation.navigate("login");
        navigation.reset({ 
         routes: [{
           name: 'login'
         }]
       })
-      }, 1000);
+      }, 3500);
     }
   }
 
@@ -81,7 +79,7 @@ export default function Splash() {
   }, []);
 
   return (
-    <Container>
+    <SafeAreaView style={styles.container}>
       <Lottie
         source={TruckAnimation}
         autoPlay
@@ -89,8 +87,8 @@ export default function Splash() {
         resizeMode="contain"
         autoSize
       />
-      <TitleText>Transporta Ai!</TitleText>
-      <LoadingIcon size="large" color="#fff" />
-    </Container>
+      <Text style={styles.TitleText}>Transporta Ai!</Text>
+      <ActivityIndicator size="large" color="#fff" />
+    </SafeAreaView>
   );
 }

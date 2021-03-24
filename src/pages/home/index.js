@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, ScrollView, SafeAreaView } from "react-native";
+import { Text, View, ScrollView, SafeAreaView, Alert } from "react-native";
 import {
   FontAwesome
 } from "@expo/vector-icons";
@@ -18,6 +18,7 @@ export default function Home() {
   const [freights,setFreights] = useState([])
   const [messageNoFreigths,setMessageNoFreigths] = useState('')
   const [loading,setLoading] = useState(true)
+  const user_id = useSelector((state) => state.id);
 
   const config = {
     headers: {
@@ -57,6 +58,16 @@ export default function Home() {
       }
     }
     getFreights()
+  },[])
+
+  useEffect(()=>{
+    async function checkStatus(){
+      const response = await api.get(`users/${user_id}`,config)
+      if(response.data.status==='AGUARDANDO'){
+       return Alert.alert("ATENÇÂO","Seus dados cadastrais aindam não foram confirmados! aguarde aprovação para poder iniciar fretes.")
+      }
+    }
+    checkStatus()
   },[])
   
 

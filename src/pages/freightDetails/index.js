@@ -1,21 +1,36 @@
-import React, {useState, useEffect} from 'react';
-import { View, Text, ScrollView,Linking } from 'react-native';
+import React, {useState,useEffect} from 'react';
+import { View, Text, ScrollView,Linking, Alert } from 'react-native';
 import MapView,{Marker} from "react-native-maps";
-import { getCurrentPositionAsync, } from "expo-location";
-import { Button} from "react-native-paper";
+import { Button, ActivityIndicator, Colors} from "react-native-paper";
 import {FontAwesome,FontAwesome5} from '@expo/vector-icons'
 import styles from "./styles";
 import Header from '../../components/header';
 import { RectButton } from 'react-native-gesture-handler';
 import Directions from '../../components/directions'
 import getPixelSize from '../../utils/getPixelSize'
+import mapStyle from '../../utils/mapStyle.json'
+import { useSelector } from "react-redux";
+import api from '../../services/api'
+import truckMarker from '../../assets/images/truck-marker.png'
 
 
 function FreightDetails({ route }) {
+  const [loading, setLoading] = useState(false);
+  const [userPermited, setUserPermited] = useState(false);
   const [mapView,setMapView] = useState(null)
-  const [currentRegion, setCurrentRegion] = useState(null);
   const freight = route.params.freight;
   const issuer = route.params.issuer;
+
+  const user_id = useSelector((state) => state.id);
+  const issuer_id = issuer.id;
+  const freight_id = freight.id;
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${useSelector((state) => state.token)}`,
+    },
+  };
+
   const origin = {
     latitude:freight.lat_origin,
     longitude:freight.long_origin
@@ -41,30 +56,47 @@ function FreightDetails({ route }) {
     Linking.openURL(phoneNumber);
   }
 
-  useEffect(() => {
-    async function loadInitialPosition() {
-        const { coords } = await getCurrentPositionAsync({
-          enableHighAccuracy: true,
-        });
-        if(coords){
-          const { latitude, longitude } = coords;
-
-        setCurrentRegion({
-          latitude,
-          longitude,
-          latitudeDelta: 0.10,
-          longitudeDelta: 0.10,
-        });
-        }else{
-          alert("Para esta funcionalidade ative a LOCALIZAÇÃO e abre o app novamente!")
-        } 
+  async function CreateNewNegotiation(){
+    setLoading(true)
+    if(userPermited===false){
+      setLoading(false)
+      return Alert.alert("ATENÇÃO","Seus dados ainda precisam ser confirmados para iniciar frete! Aguarde.")
     }
-    loadInitialPosition();
-  }, []);
+    if(user_id===""||user_id===null||issuer_id===""||issuer_id===null||freight===""||freight===null){
+      setLoading(false)
+      return alert("Erro ao obter ID para fechar o frete!")
+    }
 
-  function handleRegionChanged(region) {
-    setCurrentRegion(region);
+    try {
+      const response = await api.post('negotiations',{
+        user_id,
+        issuer_id,
+        freight_id
+      },config)
+      if(response.status===226){
+        setLoading(false)
+        Alert.alert("ATENÇÃO", response.data.message);
+      }
+      if(response.status===201){
+        setLoading(false)
+        Alert.alert("SUCESSO", "Pedido de frete enviado! verifique nos seus fretes e atualize para verificar se o pedido foi aceito");
+      }
+    } catch (error) {
+      setLoading(false)
+      alert(erro)
+    }
   }
+
+  useEffect(()=>{
+    async function checkStatus(){
+      const response = await api.get(`users/${user_id}`,config)
+      if(response.data.status==='AGUARDANDO'){
+       return setUserPermited(false)
+      }
+      setUserPermited(true)
+    }
+    checkStatus()
+  },[])
 
   return (
     <>
@@ -79,11 +111,9 @@ function FreightDetails({ route }) {
             
         <MapView
         loadingEnabled
-        zoomEnabled={false}
         showsBuildings={false}
         showsPointsOfInterest={false}
-        onRegionChangeComplete={handleRegionChanged}
-        initialRegion={currentRegion}
+        customMapStyle={mapStyle}
         style={styles.map}
         ref={el=>setMapView(el)}
         >
@@ -108,6 +138,7 @@ function FreightDetails({ route }) {
       }}
       title={freight.city_origin+"-"+freight.uf_origin}
       description={"Origem do frete"}
+      image={truckMarker}
     />
     <Marker
       coordinate={{
@@ -116,6 +147,7 @@ function FreightDetails({ route }) {
       }}
       title={freight.city_destiny+"-"+freight.uf_destiny}
       description={"Destino do frete"}
+      image={truckMarker}
     />
         </MapView>
       </View>
@@ -125,10 +157,10 @@ function FreightDetails({ route }) {
       <Text style={styles.text}>Frete Nº {freight.id}</Text>
         <View style={{flexDirection:'row'}}>
           <RectButton onPress={sendWhatsappMessage}>
-          <FontAwesome5 style={{marginRight:10}} name="whatsapp-square" size={40} color="green" />
+          <FontAwesome5 style={{marginRight:10}} name="whatsapp-square" size={40} color="#34af23" />
           </RectButton>
           <RectButton onPress={sendPhoneCall}>
-          <FontAwesome name="phone-square" size={43} color="blue" />
+          <FontAwesome name="phone-square" size={43} color="#eb001b" />
           </RectButton>
         </View>
       </View>
@@ -157,13 +189,22 @@ function FreightDetails({ route }) {
 
           <Text style={styles.text}>Observação: {freight.obs}</Text>
 
+          {loading ? (
+            <ActivityIndicator
+              size="large"
+              animating={true}
+              color={Colors.red800}
+            />
+          ) : (
           <Button
           style={{marginTop:20,marginBottom:40}}
               color="#eb001b"
               mode="contained"
+              onPress={CreateNewNegotiation}
             >
               FAZER FRETE
             </Button>
+            )}
 
       </ScrollView>
       

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, SafeAreaView } from "react-native";
 import MapView, { Marker, Callout } from "react-native-maps";
 import { getCurrentPositionAsync, } from "expo-location";
+import mapStyle from '../../utils/mapStyle.json'
 
 import styles from "./styles";
 
@@ -63,17 +64,10 @@ function Locations() {
         zoomEnabled={false}
         showsBuildings={false}
         showsPointsOfInterest={false}
+        customMapStyle={mapStyle}
         onRegionChangeComplete={handleRegionChanged}
         initialRegion={currentRegion}
         style={styles.map}>
-          <Marker
-            coordinate={{
-              latitude: -7.525774,
-              longitude: -46.042129
-            }}
-            title={"Eu"}
-            description={"Voce"}
-          />
         </MapView>
       </View>
     </>

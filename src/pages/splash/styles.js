@@ -1,21 +1,22 @@
-import React from 'react';
-import styled from 'styled-components/native';
+import { StyleSheet } from "react-native";
 
-export const Container = styled.SafeAreaView`
-  background-color: #19062b;
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#19062b",
+    justifyContent: "center",
+    alignItems:'center',
+    paddingHorizontal: 20,
+  },
+  LoadingIcon:{
+    marginTop:50
+  },
+  TitleText: {
+    textAlign: 'center',
+    fontSize: 38,
+    fontFamily: "Archivo_700Bold",
+    color: "#fff"
+  }
+});
 
-export const LoadingIcon = styled.ActivityIndicator`
-  margin-top: 50px;
-`;
-
-export const TitleText = styled.Text`
-  text-align: center;
-  font-size: 38px;
-  font-family: 'sans-serif-condensed';
-  font-weight: bold;
-  color: #fff;
-`;
+export default styles
