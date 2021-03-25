@@ -42,17 +42,18 @@ function showVehicleModal(){
 
   return (
     <ScrollView style={styles.container}>
+      <View style={{alignSelf:'flex-end'}}>
+      <Button
+    color="#fff"
+    onPress={logout}
+    >
+            <MaterialIcons name="logout" size={24} color="#fff" />
+          </Button>
+      </View>
       <View style={{
       alignItems: 'center'
     }}>
       <MaterialIcons name="account-circle" size={150} color="#fff" />
-      <Button
-    color="#eb001b"
-    mode="contained"
-    onPress={logout}
-    >
-            Sair
-          </Button>
       </View>
       <View style={styles.titleContainer}>
         <Text style={styles.titleText}>Dados pessoais</Text>

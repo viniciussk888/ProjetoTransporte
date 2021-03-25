@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TextInput, Modal, StyleSheet, Text, Pressable, View,Picker  } from "react-native";
-import { Ionicons } from '@expo/vector-icons'
+import { Ionicons,AntDesign } from '@expo/vector-icons'
 import { RectButton } from 'react-native-gesture-handler';
 import { Button, RadioButton } from "react-native-paper";
 
@@ -28,6 +28,17 @@ const VehicleModal = () => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+
+<View style={styles.closeButonView}>
+          <Button
+          style={styles.closeButon}
+    color="#eb001b"
+    onPress={() => setModalVisible(!modalVisible)}
+    >
+            <AntDesign style={styles.closeButon} name="closecircle" size={30} color="red" />
+          </Button>
+          </View>
+
 
           <View style={styles.buttonsContainer}>
       <Text style={styles.textSection}>Cavalo</Text>
@@ -215,6 +226,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center"
+  },
+  closeButonView:{
+    alignSelf:'flex-end',
+  },
+  closeButon:{
+    marginTop:-35,
+    marginRight:-35
   },
   modalView: {
     backgroundColor:'#afb7bd',
