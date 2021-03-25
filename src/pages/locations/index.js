@@ -38,7 +38,7 @@ function Locations() {
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.contentTitle}>
-            <Text style={styles.textTitle}>Encontre aqui locais importantes.</Text>
+            <Text style={styles.textTitle}>Encontre aqui locais e empresas</Text>
           </View>
 
           <Text style={styles.textCategory}>Categorias</Text>
@@ -60,8 +60,8 @@ function Locations() {
         </View>
         <MapView
         showsUserLocation
+        rotateEnabled={false}
         loadingEnabled
-        zoomEnabled={false}
         showsBuildings={false}
         showsPointsOfInterest={false}
         customMapStyle={mapStyle}

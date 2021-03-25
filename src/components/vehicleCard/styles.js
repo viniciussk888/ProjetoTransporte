@@ -1,0 +1,25 @@
+import { StyleSheet } from 'react-native'
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'column',
+    backgroundColor: '#eb001b',
+    width:230,
+    height:200,
+    marginHorizontal: 5,
+    borderRadius: 8,
+    padding: 5
+  },
+  title: {
+    fontFamily: 'Poppins_600SemiBold',
+    fontSize: 10,
+    color: "#fff",
+    textShadowColor: '#000',
+    textShadowOffset: {
+      width: 5,
+      height: 5
+    },
+  }
+})
+
+export default styles
