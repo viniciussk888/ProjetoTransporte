@@ -5,10 +5,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '#eb001b',
     width:230,
-    height:200,
+    height:190,
     marginHorizontal: 5,
     borderRadius: 8,
-    padding: 5
+    padding: 5,
+    marginBottom:50
   },
   title: {
     fontFamily: 'Poppins_600SemiBold',

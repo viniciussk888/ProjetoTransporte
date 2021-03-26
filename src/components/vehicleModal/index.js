@@ -1,21 +1,60 @@
-import React, { useState } from "react";
-import { TextInput, Modal, StyleSheet, Text, Pressable, View,Picker  } from "react-native";
+import React, { useState, useEffect } from "react";
+import { TextInput, Modal, StyleSheet, Text, View,Picker,Alert  } from "react-native";
 import { Ionicons,AntDesign } from '@expo/vector-icons'
 import { RectButton } from 'react-native-gesture-handler';
-import { Button, RadioButton } from "react-native-paper";
+import { Button, RadioButton, ActivityIndicator,Colors } from "react-native-paper";
+import api from '../../services/api'
+import {useSelector} from 'react-redux'
 
-const VehicleModal = () => {
+const VehicleModal = ({sync}) => {
+  const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-
-  const [checked, setChecked] = useState("Próprio");
-
+  const user_id = useSelector((state) => state.id);
+  const [board, setBoard] = useState("");
+  const [rntrc, setRntrc] = useState("");
+  const [board_cart, setBoard_cart] = useState("");
+  const [photoURL, setPhotoURL] = useState("");
+  const [checked, setChecked] = useState("Próprio");//property
   const [stateVehicle, setStateVehicle] = useState({
     vehicle: "Selecione",
-  });
+  });//type_vehicle
   const [stateCarreta, setStateCarreta] = useState({
     carreta: "Selecione",
-  });
+  });//type_cart
 
+  useEffect(()=>{
+setStateCarreta("Selecione")
+setStateVehicle("Selecione")
+setChecked('Próprio')
+  },[modalVisible])
+
+  async function createNewVehicle(){
+    setLoading(true)
+    try {
+      const response = await api.post('vehicles',{
+      user_id,
+      board,
+      rntrc,
+      type_vehicle:stateVehicle.vehicle,
+      property:checked,
+      board_cart,
+      type_cart:stateCarreta.carreta,
+      photoURL
+      })
+      if(response.status===201){
+        setLoading(false)
+        sync()
+        Alert.alert("SUCESSO","Cadastrado com sucesso!")
+        setModalVisible(!modalVisible)
+      }else if(response.status===226){
+        setLoading(false)
+        return Alert.alert("ATENÇÃO",response.data.message)
+      }
+    } catch (error) {
+      setLoading(false)
+      alert(error)
+    }
+  }
   return (
     <View style={styles.centeredView}>
       <Modal
@@ -45,7 +84,8 @@ const VehicleModal = () => {
           
 <View style={styles.buttonShort}>
             <TextInput
-    value="oxy8181"
+    value={board}
+    onChangeText={(text) => setBoard(text)}
     underlineColorAndroid='transparent'
     keyboardType="default"
     placeholder="Placa"
@@ -53,7 +93,8 @@ const VehicleModal = () => {
     style={styles.inputShort}
     />
             <TextInput
-    value="12345678"
+    value={rntrc}
+    onChangeText={(text) => setRntrc(text)}
     underlineColorAndroid='transparent'
     keyboardType="numeric"
     placeholder="RNTRC"
@@ -167,8 +208,8 @@ const VehicleModal = () => {
 <View style={styles.buttonShort}>
             <TextInput
     keyboardType="default"
-    
-    value="oxy8181"
+    onChangeText={(text) => setBoard_cart(text)}
+    value={board_cart}
     underlineColorAndroid='transparent'
     placeholder="Placa"
     placeholderTextColor="#000"
@@ -199,17 +240,24 @@ const VehicleModal = () => {
               </Picker>
             </View>
           </View>
-
+{
+  loading ? (
+    <ActivityIndicator
+      size="large"
+      animating={true}
+      color={Colors.red800}
+    />
+  ) : (
 <Button
     color="#eb001b"
     mode="contained"
-    onPress={() => setModalVisible(!modalVisible)}
+    onPress={createNewVehicle}
     >
             GRAVAR
           </Button>
+  )
+}
 </View>
-    
-
             
           </View>
         </View>

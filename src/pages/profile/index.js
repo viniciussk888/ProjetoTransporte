@@ -1,20 +1,38 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, ScrollView, Picker } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, ScrollView, Alert } from 'react-native';
 import styles from "./styles";
-import { MaterialIcons, FontAwesome5,Ionicons } from '@expo/vector-icons'
+import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons'
 import { RectButton } from 'react-native-gesture-handler';
-import { Button, RadioButton } from "react-native-paper";
+import { Button, ActivityIndicator,Colors } from "react-native-paper";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import VehicleCard from '../../components/vehicleCard';
 import VehicleModal from '../../components/vehicleModal';
+import api from '../../services/api'
+import {useSelector} from 'react-redux'
 
 function Profile() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
+  const [controlDelete, setControlDelete] = useState('');
+  const [vehicles, setVehicles] = useState([])
+  const [name, setName] = useState('')
+  const [whatsapp, setWhatsapp] = useState('')
+  const [password, setPassword] = useState('')
   const [editPessoal, setEditPessoal] = useState(false)
   const [editPessoalColor, setEditPessoalColor] = useState("#FFF")
-  const [modalVisible, setModalVisible] = useState(false);
+  const user_id = useSelector((state) => state.id);
+
+  function deleted(){
+    setControlDelete(Math.random)
+  }
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${useSelector((state) => state.token)}`,
+    },
+  };
 
   function changeEditPessoal() {
     !editPessoal ? setEditPessoalColor("#eb001b") : setEditPessoalColor("#fff")
@@ -35,10 +53,51 @@ function logout(){
   });
   navigateToLogin();
 }
-function showVehicleModal(){
-  setModalVisible(!modalVisible)
-}
 
+async function updateUser(){
+  setLoading(true)
+  if(password===""){
+    const response = await api.put(`users/${user_id}`,{
+      name,
+      whatsapp
+    },config)
+    setName(response.data.name)
+    setWhatsapp(response.data.whatsapp)
+    setEditPessoal(false)
+    setEditPessoalColor("#fff")
+    setLoading(false)
+    Alert.alert("SUCESSO","Dados alterados com sucesso!")
+  }else{
+    const response = await api.put(`users/${user_id}`,{
+      name,
+      whatsapp,
+      password
+    },config)
+    setName(response.data.name)
+    setWhatsapp(response.data.whatsapp)
+    setPassword("")
+    setEditPessoal(false)
+    setEditPessoalColor("#fff")
+    setLoading(false)
+    Alert.alert("SUCESSO","Dados alterados com sucesso!")
+  }
+}
+useEffect(()=>{
+  async function getVehicles(){
+    const response = await api.get(`vehicles/${user_id}`)
+    setVehicles(response.data)
+  }
+  getVehicles()
+},[controlDelete])
+
+useEffect(()=>{
+  async function getUserData(){
+    const response = await api.get(`users/${user_id}`)
+    setName(response.data.name)
+    setWhatsapp(response.data.whatsapp)
+  }
+  getUserData()
+},[])
 
   return (
     <ScrollView style={styles.container}>
@@ -69,9 +128,10 @@ function showVehicleModal(){
     underlineColorAndroid='transparent'
     keyboardType="default"
     placeholder="Nome"
-    value="ALBERTO VINICIUS MARTINS ROCHA"
+    value={name}
     placeholderTextColor="#000"
     style={styles.input}
+    onChangeText={(text) => setName(text)}
     />
     <Text style={styles.textSection}>Whatsapp</Text>
     <TextInput
@@ -79,46 +139,58 @@ function showVehicleModal(){
     underlineColorAndroid='transparent'
     keyboardType="numeric"
     placeholder="Whatsapp"
-    value="(99)981777152"
+    value={whatsapp}
     placeholderTextColor="#000"
     style={styles.input}
+    onChangeText={(text) => setWhatsapp(text)}
     />
     <Text style={styles.textSection}>Senha</Text>
     <TextInput
     editable={editPessoal}
     underlineColorAndroid='transparent'
     secureTextEntry={true}
-    placeholder="Senha"
-    value="lokomania"
+    placeholder="Alterar senha atual"
+    value={password}
     placeholderTextColor="#000"
     style={styles.input}
+    onChangeText={(text) => setPassword(text)}
     />
 
-{editPessoal
-    &&
+{editPessoal?
+    loading ? (
+      <ActivityIndicator
+        size="large"
+        animating={true}
+        color={Colors.red800}
+      />
+    ) : (
     <Button
     style={{
       marginTop: 15
     }}
     color="#eb001b"
     mode="contained"
+    onPress={updateUser}
     >
             SALVAR
           </Button>
+    )
+    :null
     }
 </View>
 
       <View style={styles.titleContainer}>
         <Text style={styles.titleText}>Veículos</Text>
-        <RectButton onPress={showVehicleModal}>
-        <VehicleModal />
-        </RectButton>
+        <View>
+        <VehicleModal sync={deleted} />
+        </View>
       </View>
       <ScrollView horizontal>
-            <VehicleCard/>
-            <VehicleCard/>
-            <VehicleCard/>
-            <VehicleCard/>
+        {
+        vehicles.length>0?vehicles.map((vehicle)=>(
+          <VehicleCard deleted={deleted} config={config} key={vehicle.id} vehicle={vehicle} />
+        )):null
+      }
           </ScrollView>
 
     </ScrollView>
