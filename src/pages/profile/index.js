@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, ScrollView, Alert } from 'react-native';
+import { View, Text, TextInput, ScrollView, Alert,Platform, Image } from 'react-native';
 import styles from "./styles";
 import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons'
 import { RectButton } from 'react-native-gesture-handler';
@@ -10,6 +10,8 @@ import VehicleCard from '../../components/vehicleCard';
 import VehicleModal from '../../components/vehicleModal';
 import api from '../../services/api'
 import {useSelector} from 'react-redux'
+
+import * as ImagePicker from 'expo-image-picker';
 
 function Profile() {
   const dispatch = useDispatch();
@@ -23,6 +25,7 @@ function Profile() {
   const [editPessoal, setEditPessoal] = useState(false)
   const [editPessoalColor, setEditPessoalColor] = useState("#FFF")
   const user_id = useSelector((state) => state.id);
+  const [image, setImage] = useState("");
 
   function deleted(){
     setControlDelete(Math.random)
@@ -95,9 +98,38 @@ useEffect(()=>{
     const response = await api.get(`users/${user_id}`)
     setName(response.data.name)
     setWhatsapp(response.data.whatsapp)
+    setImage(response.data.profileURL)
   }
   getUserData()
 },[])
+
+useEffect(() => {
+  (async () => {
+    if (Platform.OS !== 'web') {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        alert('Permissão de acesso a galeria é nescessaria!');
+      }
+    }
+  })();
+}, []);
+
+const pickImage = async () => {
+  let result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.All,
+    allowsEditing: true,
+    aspect: [4, 3],
+    quality: 1,
+  });
+
+  if(result.type!=="image"){
+    return alert("Somente permitido a seleção de imagem!")
+  }
+
+  if (!result.cancelled) {
+    setImage(result.uri);
+  }
+};
 
   return (
     <ScrollView style={styles.container}>
@@ -112,7 +144,9 @@ useEffect(()=>{
       <View style={{
       alignItems: 'center'
     }}>
-      <MaterialIcons name="account-circle" size={150} color="#fff" />
+      <RectButton onPress={pickImage}>
+      <Image source={{ uri: image }} style={{ width: 160, height: 160,borderRadius:100,borderColor:"#000",borderWidth:3 }}/>
+      </RectButton>
       </View>
       <View style={styles.titleContainer}>
         <Text style={styles.titleText}>Dados pessoais</Text>

@@ -1,15 +1,16 @@
-import React, { useState } from "react";
-import { TextInput, View, Text,ScrollView, Alert } from "react-native";
+import React, { useState,useEffect } from "react";
+import { TextInput, View, Text,ScrollView, Alert, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RadioButton, Button,ActivityIndicator, Colors } from "react-native-paper";
 import api from '../../services/api'
-
+import Firebase from '../../services/firebase'
 import Header from "../../components/header";
 
 import styles from "./styles";
 import { RectButton } from "react-native-gesture-handler";
-import Motora from "../../assets/images/motora.svg";
 import { dateMask } from "../../utils/dateMask";
+
+import * as ImagePicker from 'expo-image-picker';
 
 export default function Register() {
   const navigation = useNavigation();
@@ -22,6 +23,7 @@ export default function Register() {
   const [checked, setChecked] = useState("PF");
   const [document, setDocument] = useState("");
   const [birthDate, setBirthDate] = useState("Não");
+  const [profileURL, setProfileURL] = useState("");
 
   function confirmRegister(){
     Alert.alert(
@@ -38,25 +40,33 @@ export default function Register() {
     );
   }
 
-  async function registerNewUser(){
-    setLoading(true);
-    if(name===""||whatsapp===""||password===""||document===""){
-      setLoading(false);
-      return alert("INFORME TODOS OS CAMPOS!")
-    }else if(checked==="PF"&&birthDate===""){
-      setLoading(false);
-      return alert("INFORME A DATA DE NASCIMENTO!")
-    }
-    try {
+  async function submiteImageUser(uri,NameFile) {
+    const response = await fetch(uri);
+     const blob = await response.blob();
+
+     var ref = Firebase.storage().ref().child("images/"+NameFile);
+
+     await ref.put(blob);
+
+     const url = await ref.getDownloadURL();
+
+     try {
       setName(name.toUpperCase())
-      const response = await api.post('check-users',{
-        document
+      const response = await api.post('users',{
+      name,
+      whatsapp,
+      password,
+      type:checked,
+      document,
+      birthDate,
+      profileURL:url
       })
-      if(response.status===200&&response.data.message==="OK"){
+      if(response.status===201){
         Alert.alert("ATENÇÃO","Para finalizar o cadastro informe os dados do veiculo!")
-        navigateToVehicleRegister()
+        navigateToVehicleRegister(response.data.id)
         setLoading(false);
       }else if(response.status===226){
+        setLoading(false)
         Alert.alert("ATENÇÂO",response.data.message)
       }
       setLoading(false);
@@ -65,26 +75,79 @@ export default function Register() {
       setLoading(false);
     }
   }
+
+  async function registerNewUser(){
+    setLoading(true);
+
+    if(profileURL===""||name===""||whatsapp===""||password===""||document===""){
+      setLoading(false);
+      return alert("INFORME TODOS OS CAMPOS E IMAGEM!")
+    }else if(checked==="PF"&&birthDate===""){
+      setLoading(false);
+      return alert("INFORME A DATA DE NASCIMENTO!")
+    }
+    const response = await api.post('check-users',{
+      document
+    })
+    if(response.status===226){
+      setLoading(false)
+      return Alert.alert("ATENÇÂO",response.data.message)
+    }else(
+      submiteImageUser(profileURL,document)
+    )
+  }
+
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Permissão de acesso a galeria é nescessaria!');
+        }
+      }
+    })();
+  }, []);
+  
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+  
+    if(result.type!=="image"){
+      return alert("Somente permitido a seleção de imagem!")
+    }
+  
+    if (!result.cancelled) {
+      setProfileURL(result.uri);
+    }
+  };
   
 
-  function navigateToVehicleRegister() {
-    const user = {
-      name,
-      whatsapp,
-      password,
-      type:checked,
-      document,
-      birthDate
-    }
-    console.log(user)
-   navigation.navigate("vehicle",{user:user});
+  function navigateToVehicleRegister(id) {
+   navigation.navigate("vehicle",{user_id:id});
   }
 
   return (
     <>
       <Header routeToBack="login" title="Informe os dados" />
       <ScrollView style={styles.container}>
-        <Motora width="100%" height="180" />
+<View style={{alignItems:'center'}}>
+      <RectButton onPress={pickImage}>
+      <Image source={{ uri: profileURL }} style={{
+         width: 160, 
+         height: 160,
+         borderRadius:100,
+         borderColor:"#000",
+         borderWidth:3,
+         backgroundColor:'#fff'
+         }}/>
+      </RectButton>
+      <Text>Selecione uma foto</Text>
+      </View>
+
         <View style={styles.buttonsContainer}>
           <TextInput
             keyboardType="default"
@@ -158,7 +221,7 @@ export default function Register() {
 
           {checked==="PF"? 
           <TextInput
-            keyboardType="default"
+            keyboardType="numeric"
             placeholder="Data de nascimento"
             placeholderTextColor="#000"
             style={styles.input}

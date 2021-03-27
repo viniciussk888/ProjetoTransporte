@@ -1,22 +1,25 @@
 import React, { useState } from "react";
-import { TextInput, View, Text,Alert } from "react-native";
+import { TextInput, View, Text,Alert,Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RadioButton, Button,ActivityIndicator, Colors } from "react-native-paper";
 import api from '../../services/api'
 import styles from "./styles";
 import { Picker } from "@react-native-picker/picker";
-import Truck from "../../assets/images/truck.svg";
+import { RectButton } from 'react-native-gesture-handler';
+import Firebase from '../../services/firebase'
+import * as ImagePicker from 'expo-image-picker';
 
 export default function Vehicle({route}) {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
-  const  user  = route.params.user;
+  const  user_id  = route.params.user_id;
 
   const [board, setBoard] = useState("");
   const [rntrc, setRntrc] = useState("");
   const [checked, setChecked] = useState("Próprio");//property
   const [board_cart, setBoard_cart] = useState("");
   const [photoURL, setPhotoURL] = useState("");
+  const [profileURL, setProfileURL] = useState("");
 
 
   const [stateVehicle, setStateVehicle] = useState({
@@ -50,12 +53,45 @@ export default function Vehicle({route}) {
     );
   }
 
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+  
+    if(result.type!=="image"){
+      return alert("Somente permitido a seleção de imagem!")
+    }
+  
+    if (!result.cancelled) {
+      setPhotoURL(result.uri);
+    }
+  };
+
+  async function submiteImageVehicle(uri,name) {
+    const response = await fetch(uri);
+     const blob = await response.blob();
+     var ref = Firebase.storage().ref().child("images/"+name);
+     await ref.put(blob).then(async function (snapshot) {
+      const url = await snapshot.ref.getDownloadURL()
+      setPhotoURL(url)
+    })
+  }
+  
   async function registerNewVehicle(){
-    setLoading(true)
-    if(board===""||rntrc===""||stateVehicle==="Selecione"||board_cart===""||stateCarreta==="Selecione"){
+  //  setLoading(true)
+    if(photoURL===""||board===""||rntrc===""||stateVehicle==="Selecione"||board_cart===""||stateCarreta==="Selecione"){
       setLoading(false)
       return alert("INFORME TODOS OS DADOS DO VEICULO!")
     }
+    submiteImageUser(user.profileURL,user.document)
+    console.log(profileURL)
+    submiteImageVehicle(photoURL,rntrc)
+    console.log(photoURL)
+    return
+    //submiteImage(photoURL,rntrc)
     try {
       setBoard(board.toUpperCase())
       setBoard_cart(board_cart.toUpperCase())
@@ -66,14 +102,14 @@ export default function Vehicle({route}) {
       type:user.type,
       document:user.document,
       birthDate:user.birthDate,
-      profileURL:user.profileURL,
+      profileURL:urlProfile,
       board,
       rntrc,
       type_vehicle:stateVehicle.vehicle,
       property:checked,
       board_cart,
       type_cart:stateCarreta.carreta,
-      photoURL
+      photoURL:urlVehicle
       })
       if(response.status===226){
         setLoading(false)
@@ -93,7 +129,11 @@ export default function Vehicle({route}) {
   return (
     <>
       <View style={styles.container}>
-        <Truck width="100%" height="150" />
+
+      <RectButton onPress={pickImage}>
+      <Image source={{ uri: photoURL }} style={{ width: 160, height: 160,borderRadius:100,borderColor:"#000",borderWidth:3 }}/>
+      </RectButton>
+
         <View style={styles.buttonsContainer}>
           <Text style={styles.sectionText}>Cavalo</Text>
 
