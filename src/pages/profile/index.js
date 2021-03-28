@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, ScrollView, Alert,Platform, Image } from 'react-native';
 import styles from "./styles";
-import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons'
+import { MaterialIcons, FontAwesome5,Ionicons } from '@expo/vector-icons'
 import { RectButton } from 'react-native-gesture-handler';
 import { Button, ActivityIndicator,Colors } from "react-native-paper";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import VehicleCard from '../../components/vehicleCard';
-import VehicleModal from '../../components/vehicleModal';
 import api from '../../services/api'
 import {useSelector} from 'react-redux'
 
@@ -30,7 +29,13 @@ function Profile() {
   function deleted(){
     setControlDelete(Math.random)
   }
-
+  function navigateToVehicleRegister(id) {
+    navigation.navigate("vehicle", { 
+      user_id: id,
+      routeOrigin:'profile',
+      sync:deleted
+     });
+  }
   const config = {
     headers: {
       Authorization: `Bearer ${useSelector((state) => state.token)}`,
@@ -145,7 +150,7 @@ const pickImage = async () => {
       alignItems: 'center'
     }}>
       <RectButton onPress={pickImage}>
-      <Image source={{ uri: image }} style={{ width: 160, height: 160,borderRadius:100,borderColor:"#000",borderWidth:3 }}/>
+      <Image source={{ uri: image }} style={{ width: 160, height: 160,borderRadius:100,borderColor:"#fff",borderWidth:1 }}/>
       </RectButton>
       </View>
       <View style={styles.titleContainer}>
@@ -215,9 +220,9 @@ const pickImage = async () => {
 
       <View style={styles.titleContainer}>
         <Text style={styles.titleText}>Veículos</Text>
-        <View>
-        <VehicleModal sync={deleted} />
-        </View>
+        <RectButton onPress={()=>{navigateToVehicleRegister(user_id)}}>
+        <Ionicons name="add-circle-outline" size={30} color="#fff" />
+      </RectButton>
       </View>
       <ScrollView horizontal>
         {

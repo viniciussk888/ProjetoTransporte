@@ -1,26 +1,30 @@
 import React, { useState } from "react";
-import { TextInput, View, Text,Alert,Image } from "react-native";
+import { TextInput, View, Text, Alert, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { RadioButton, Button,ActivityIndicator, Colors } from "react-native-paper";
-import api from '../../services/api'
+import {
+  RadioButton,
+  Button,
+  ActivityIndicator,
+  Colors,
+} from "react-native-paper";
+import api from "../../services/api";
 import styles from "./styles";
 import { Picker } from "@react-native-picker/picker";
-import { RectButton } from 'react-native-gesture-handler';
-import Firebase from '../../services/firebase'
-import * as ImagePicker from 'expo-image-picker';
+import { RectButton } from "react-native-gesture-handler";
+import Firebase from "../../services/firebase";
+import * as ImagePicker from "expo-image-picker";
 
-export default function Vehicle({route}) {
+export default function Vehicle({ route }) {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
-  const  user_id  = route.params.user_id;
-
+  const user_id = route.params.user_id;
+  const routeOrigin = route.params.routeOrigin;
+  const sync = route.params.sync;
   const [board, setBoard] = useState("");
   const [rntrc, setRntrc] = useState("");
-  const [checked, setChecked] = useState("Próprio");//property
+  const [checked, setChecked] = useState("Próprio"); //property
   const [board_cart, setBoard_cart] = useState("");
   const [photoURL, setPhotoURL] = useState("");
-  const [profileURL, setProfileURL] = useState("");
-
 
   const [stateVehicle, setStateVehicle] = useState({
     vehicle: "Selecione",
@@ -29,16 +33,27 @@ export default function Vehicle({route}) {
     carreta: "Selecione",
   });
 
-  function navigateToLogin() {
-  // navigation.navigate('login')
-   navigation.reset({ 
-    routes: [{
-      name: 'login'
-    }]
-  })
-   }
+  function navigateToLoginOrBack() {
+    if(routeOrigin==='register'){
+      Alert.alert(
+        "ATENÇÃO",
+        "Dados cadastrados! Faça login na plataforma e aguarde sua aprovação."
+      );
+      navigation.reset({
+        routes: [
+          {
+            name: "login",
+          },
+        ],
+      });
+    }else if(routeOrigin==='profile'){
+      sync()
+      navigation.goBack();
+    }
+    
+  }
 
-   function confirmRegister(){
+  function confirmRegister() {
     Alert.alert(
       "ATENÇÃO",
       "Confirma o cadastro do veiculo com os dados informados?",
@@ -46,9 +61,9 @@ export default function Vehicle({route}) {
         {
           text: "Cancelar",
           onPress: () => console.log("Cancel register"),
-          style: "cancel"
+          style: "cancel",
         },
-        { text: "Sim", onPress: () => registerNewVehicle() }
+        { text: "Sim", onPress: () => registerNewVehicle() },
       ]
     );
   }
@@ -60,79 +75,90 @@ export default function Vehicle({route}) {
       aspect: [4, 3],
       quality: 1,
     });
-  
-    if(result.type!=="image"){
-      return alert("Somente permitido a seleção de imagem!")
+
+    if (result.type !== "image") {
+      return alert("Somente permitido a seleção de imagem!");
     }
-  
+
     if (!result.cancelled) {
       setPhotoURL(result.uri);
     }
   };
 
-  async function submiteImageVehicle(uri,name) {
+  async function submiteImageVehicle(uri, NameFile) {
     const response = await fetch(uri);
-     const blob = await response.blob();
-     var ref = Firebase.storage().ref().child("images/"+name);
-     await ref.put(blob).then(async function (snapshot) {
-      const url = await snapshot.ref.getDownloadURL()
-      setPhotoURL(url)
-    })
-  }
-  
-  async function registerNewVehicle(){
-  //  setLoading(true)
-    if(photoURL===""||board===""||rntrc===""||stateVehicle==="Selecione"||board_cart===""||stateCarreta==="Selecione"){
-      setLoading(false)
-      return alert("INFORME TODOS OS DADOS DO VEICULO!")
-    }
-    submiteImageUser(user.profileURL,user.document)
-    console.log(profileURL)
-    submiteImageVehicle(photoURL,rntrc)
-    console.log(photoURL)
-    return
-    //submiteImage(photoURL,rntrc)
+    const blob = await response.blob();
+
+    var ref = Firebase.storage()
+      .ref()
+      .child("vehicles/" + NameFile);
+
+    await ref.put(blob);
+
+    const url = await ref.getDownloadURL();
+
     try {
-      setBoard(board.toUpperCase())
-      setBoard_cart(board_cart.toUpperCase())
-      const response = await api.post("users-vechicle",{
-      name:user.name,
-      whatsapp:user.whatsapp,
-      password:user.password,
-      type:user.type,
-      document:user.document,
-      birthDate:user.birthDate,
-      profileURL:urlProfile,
-      board,
-      rntrc,
-      type_vehicle:stateVehicle.vehicle,
-      property:checked,
-      board_cart,
-      type_cart:stateCarreta.carreta,
-      photoURL:urlVehicle
-      })
-      if(response.status===226){
-        setLoading(false)
-        Alert.alert("ATENÇÃO",response.data.message)
-      }else if(response.status===201){
-        Alert.alert("ATENÇÃO","Dados cadastrados! Faça login na plataforma e aguarde sua aprovação.")
-        setLoading(false)
-        navigateToLogin()
+      setBoard(board.toUpperCase());
+      setBoard_cart(board_cart.toUpperCase());
+      const response = await api.post("vehicles", {
+        user_id: user_id,
+        board,
+        rntrc,
+        type_vehicle: stateVehicle.vehicle,
+        property: checked,
+        board_cart,
+        type_cart: stateCarreta.carreta,
+        photoURL: url,
+      });
+      if (response.status === 226) {
+        setLoading(false);
+        Alert.alert("ATENÇÃO", response.data.message);
+      } else if (response.status === 201) {
+        setLoading(false);
+        navigateToLoginOrBack();
       }
-      setLoading(false)
+      setLoading(false);
     } catch (error) {
-      console.log(error)
-      setLoading(false)
+      console.log(error);
+      setLoading(false);
     }
+  }
+
+  async function registerNewVehicle() {
+    setLoading(true);
+    if (
+      photoURL === "" ||
+      board === "" ||
+      rntrc === "" ||
+      stateVehicle === "Selecione" ||
+      board_cart === "" ||
+      stateCarreta === "Selecione"
+    ) {
+      setLoading(false);
+      return alert("INFORME TODOS OS DADOS DO VEICULO!");
+    }
+    submiteImageVehicle(photoURL, rntrc);
   }
 
   return (
     <>
       <View style={styles.container}>
-
-      <RectButton onPress={pickImage}>
-      <Image source={{ uri: photoURL }} style={{ width: 160, height: 160,borderRadius:100,borderColor:"#000",borderWidth:3 }}/>
-      </RectButton>
+        <View style={{ alignItems: "center" }}>
+          <RectButton onPress={pickImage}>
+            <Image
+              source={{ uri: photoURL }}
+              style={{
+                width: 160,
+                height: 160,
+                borderRadius: 100,
+                borderColor: "#000",
+                borderWidth: 3,
+                backgroundColor: "#fff",
+              }}
+            />
+          </RectButton>
+          <Text>Selecione uma foto</Text>
+        </View>
 
         <View style={styles.buttonsContainer}>
           <Text style={styles.sectionText}>Cavalo</Text>
@@ -287,20 +313,21 @@ export default function Vehicle({route}) {
         </View>
 
         <View style={styles.buttonsContainer}>
-        {loading ? (
+          {loading ? (
             <ActivityIndicator
               size="large"
               animating={true}
               color={Colors.red800}
             />
           ) : (
-          <Button 
-          onPress={confirmRegister} 
-          style={{ width: "100%" }} 
-          color="#eb001b" 
-          mode="contained">
-            Cadastrar
-          </Button>
+            <Button
+              onPress={confirmRegister}
+              style={{ width: "100%" }}
+              color="#eb001b"
+              mode="contained"
+            >
+              Cadastrar
+            </Button>
           )}
         </View>
       </View>

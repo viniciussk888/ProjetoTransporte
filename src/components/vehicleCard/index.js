@@ -36,7 +36,7 @@ export default function VehicleCard({deleted,vehicle,config}) {
   }
   return (
     <View style={styles.container}>
-      <Image resizeMode="stretch" style={{width:"100%",height:'40%',borderRadius:2,borderColor:'#000',borderWidth:1}} source={require("../../assets/images/caminhao.jpg")} />
+      <Image resizeMode="stretch" style={{width:"100%",height:'40%',borderRadius:2,borderColor:'#000',borderWidth:1}} source={{ uri: vehicle.photoURL }} />
       <Text style={styles.title}>{vehicle.type_vehicle}</Text>
 
       <View style={{flexDirection:'row',justifyContent:'space-between'}}>

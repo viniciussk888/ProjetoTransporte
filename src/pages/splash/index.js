@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import styles from "./styles";
 import AsyncStorage from '@react-native-community/async-storage';
 import { useNavigation } from "@react-navigation/native";
 import { requestPermissionsAsync, getCurrentPositionAsync } from "expo-location";
 import { BackHandler, Alert, SafeAreaView,ActivityIndicator,Text } from "react-native";
 import {useSelector } from "react-redux";
-
+import Geocoder from 'react-native-geocoding';
 import TruckAnimation from "../../assets/animations/truck.json";
 import Lottie from "lottie-react-native";
 
@@ -21,6 +21,14 @@ export default function Splash() {
       const { latitude, longitude } = coords;
       await AsyncStorage.setItem('latitude', latitude.toString());
       await AsyncStorage.setItem('longitude', longitude.toString());
+      Geocoder.init("AIzaSyC2E_1QPwbcMjsUET5cAoPTEdXabXnefFw", {language : "pt-br"});
+      const response = await Geocoder.from({ latitude, longitude });
+
+      const adressArray = response.results[0].formatted_address.split(',')
+      const CityAndUfArray = adressArray[2].split('-');
+
+      await AsyncStorage.setItem('city', CityAndUfArray[0].toUpperCase());
+      await AsyncStorage.setItem('uf', CityAndUfArray[1].toUpperCase());
       
     } catch (error) {
       Alert.alert(

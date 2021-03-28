@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://fdca93cf9b99.ngrok.io",
+  baseURL: "http://eaf6bc401fe5.ngrok.io",
   //baseURL: "https://jsonplaceholder.typicode.com",
 });
 
