@@ -27,7 +27,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [checked, setChecked] = useState("PF");
   const [document, setDocument] = useState("");
-  const [birthDate, setBirthDate] = useState("Não");
+  const [birthDate, setBirthDate] = useState("");
   const [profileURL, setProfileURL] = useState("");
 
   function confirmRegister() {
@@ -138,10 +138,10 @@ export default function Register() {
   };
 
   function navigateToVehicleRegister(id) {
-    navigation.navigate("vehicle", { 
+    navigation.navigate("vehicle", {
       user_id: id,
-      routeOrigin:'register'
-     });
+      routeOrigin: "register",
+    });
   }
 
   return (
@@ -167,6 +167,7 @@ export default function Register() {
 
         <View style={styles.buttonsContainer}>
           <TextInput
+            autoCapitalize="characters"
             keyboardType="default"
             placeholder={checked === "PJ" ? "Razão Social" : "Nome"}
             placeholderTextColor="#000"
@@ -175,6 +176,7 @@ export default function Register() {
             onChangeText={(text) => setName(text)}
           />
           <TextInput
+            maxLength={11}
             keyboardType="numeric"
             placeholder="Whatsapp"
             placeholderTextColor="#000"
@@ -218,6 +220,7 @@ export default function Register() {
 
           {checked === "PJ" ? (
             <TextInput
+              maxLength={14}
               keyboardType="numeric"
               value={document}
               placeholder={"CNPJ"}
@@ -227,6 +230,7 @@ export default function Register() {
             />
           ) : (
             <TextInput
+              maxLength={11}
               keyboardType="numeric"
               value={document}
               placeholder={"CPF"}
@@ -238,6 +242,7 @@ export default function Register() {
 
           {checked === "PF" ? (
             <TextInput
+              maxLength={10}
               keyboardType="numeric"
               placeholder="Data de nascimento"
               placeholderTextColor="#000"

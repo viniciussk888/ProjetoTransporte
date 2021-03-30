@@ -13,21 +13,20 @@ const styles = StyleSheet.create({
   },
   header: {
     flex: 1,
-    minHeight: '27%',
+    minHeight: "27%",
     width: Dimensions.get("window").width,
     padding: 30,
     backgroundColor: "#19062b",
-    flexDirection: 'column',
+    flexDirection: "column",
     alignItems: "flex-start",
   },
   contentTitle: {
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   textTitle: {
     fontFamily: "Archivo_700Bold",
     color: "#fff",
     fontSize: 16,
-    lineHeight: 25,
   },
   textCategory: {
     marginTop: 10,
@@ -36,9 +35,22 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 25,
   },
-  scrolCategorie: {
-    flex: 1,
-    padding: 5
+  avatar: {
+    width: 38,
+    height: 38,
+  },
+  callout: {
+    alignItems:'center',
+    width: 180,
+  },
+  Name: {
+    fontFamily:'Archivo_700Bold',
+    fontWeight: "bold",
+    fontSize: 12,
+  },
+  Bio: {
+    color: "#666",
+    marginTop: 3,
   }
 });
 

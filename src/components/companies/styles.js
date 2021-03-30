@@ -4,17 +4,21 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flexDirection: 'column',
-    width: 65,
-    height: 65,
-    padding: 5,
-    marginBottom: 5,
-    marginLeft: 5,
-    borderRadius: 50,
+    width: 150,
+    height: 95,
+    padding: 3,
+    marginRight: 10,
+    borderRadius: 8,
     backgroundColor: '#eb001b'
   },
+  logo:{
+    width:'100%',
+    height:'100%',
+    borderRadius:8
+  },
   title: {
-    fontFamily: 'Archivo_700Bold',
-    fontSize: 8,
+    fontFamily: 'Archivo_400Regular',
+    fontSize: 10,
     color: "#fff"
   }
 })

@@ -19,7 +19,7 @@ import {
 } from "react-native-paper";
 import api from "../../services/api";
 import { useSelector } from "react-redux";
-import pickImage from '../../utils/pickImage'
+import { FAB } from "react-native-paper";
 
 const VehicleModal = ({ sync }) => {
   const [loading, setLoading] = useState(false);
@@ -37,71 +37,8 @@ const VehicleModal = ({ sync }) => {
     carreta: "Selecione",
   }); //type_cart
 
-  useEffect(() => {
-    setStateCarreta("Selecione");
-    setStateVehicle("Selecione");
-    setChecked("Próprio");
-  }, [modalVisible]);
-
-  async function createNewVehicle() {
-    if (
-      photoURL === "" ||
-      board === "" ||
-      rntrc === "" ||
-      stateVehicle === "Selecione" ||
-      board_cart === "" ||
-      stateCarreta === "Selecione"
-    ) {
-      setLoading(false);
-      return Alert.alert("ATENÇÃO", "INFORME TODOS OS DADOS DO VEICULO!");
-    }
-    submiteImageVehicle(photoURL, rntrc);
-  }
-
-  function pickImg(){
-    setPhotoURL(pickImage())
-  }
-
-  async function submiteImageVehicle(uri, NameFile) {
-    const response = await fetch(uri);
-    const blob = await response.blob();
-
-    var ref = Firebase.storage()
-      .ref()
-      .child("vehicles/" + NameFile);
-
-    await ref.put(blob);
-
-    const url = await ref.getDownloadURL();
-
-    setLoading(true);
-    try {
-      const response = await api.post("vehicles", {
-        user_id,
-        board,
-        rntrc,
-        type_vehicle: stateVehicle.vehicle,
-        property: checked,
-        board_cart,
-        type_cart: stateCarreta.carreta,
-        photoURL: url,
-      });
-      if (response.status === 201) {
-        setLoading(false);
-        sync();
-        Alert.alert("SUCESSO", "Cadastrado com sucesso!");
-        setModalVisible(!modalVisible);
-      } else if (response.status === 226) {
-        setLoading(false);
-        return Alert.alert("ATENÇÃO", response.data.message);
-      }
-    } catch (error) {
-      setLoading(false);
-      alert(error);
-    }
-  }
-
   return (
+    <>
     <View style={styles.centeredView}>
       <Modal
         animationType="slide"
@@ -128,178 +65,17 @@ const VehicleModal = ({ sync }) => {
               </Button>
             </View>
 
-            <View style={{ alignItems: "center" }}>
-              <RectButton onPress={pickImg}>
-                <Image
-                  source={{ uri: photoURL }}
-                  style={{
-                    width: 160,
-                    height: 160,
-                    borderRadius: 100,
-                    borderColor: "#000",
-                    borderWidth: 3,
-                    backgroundColor: "#fff",
-                  }}
-                />
-              </RectButton>
-              <Text>Selecione uma foto</Text>
-            </View>
-
             <View style={styles.buttonsContainer}>
-              <Text style={styles.textSection}>Cavalo</Text>
+              <Text style={styles.textSection}>
+                Adicione dados ao mapa para ajudar os companheiros de viagem
+              </Text>
 
-              <View style={styles.buttonShort}>
-                <TextInput
-                  value={board}
-                  onChangeText={(text) => setBoard(text)}
-                  underlineColorAndroid="transparent"
-                  keyboardType="default"
-                  placeholder="Placa"
-                  placeholderTextColor="#000"
-                  style={styles.inputShort}
-                />
-                <TextInput
-                  value={rntrc}
-                  onChangeText={(text) => setRntrc(text)}
-                  underlineColorAndroid="transparent"
-                  keyboardType="numeric"
-                  placeholder="RNTRC"
-                  placeholderTextColor="#000"
-                  style={styles.inputShort}
-                />
-              </View>
-              <View style={styles.PickerView}>
-                <Picker
-                  mode={"dropdown"}
-                  style={styles.picker}
-                  selectedValue={stateVehicle.vehicle}
-                  onValueChange={(itemValue, itemIndex) =>
-                    setStateVehicle({
-                      vehicle: itemValue,
-                    })
-                  }
-                >
-                  <Picker.Item
-                    label="Selecione o tipo do veículo"
-                    value="none"
-                  />
-                  <Picker.Item label="TRUCK 3 EX" value="TRUCK 3 EX" />
-                  <Picker.Item
-                    label="BI-TRUCK - 4 EX"
-                    value="BI-TRUCK - 4 EX"
-                  />
-                  <Picker.Item label="BI-TREM - 7 EX" value="BI-TREM - 7 EX" />
-                  <Picker.Item label="BI-TREM - 8 EX" value="BI-TREM - 8 EX" />
-                  <Picker.Item label="BI-TREM - 9 EX" value="BI-TREM - 9 EX" />
-                  <Picker.Item
-                    label="CAVALO 2 EX | VANDERLEIA 2 EX"
-                    value="CAVALO 2 EX | VANDERLEIA 2 EX"
-                  />
+              <View style={styles.buttonsContainer}>
 
-                  <Picker.Item
-                    label="CAVALO 2 EX | VANDERLEIA 3 EX"
-                    value="CAVALO 2 EX | VANDERLEIA 3 EX"
-                  />
-
-                  <Picker.Item
-                    label="CAVALO 3 EX | VANDERLEIA 3 EX"
-                    value="CAVALO 3 EX | VANDERLEIA 3 EX"
-                  />
-
-                  <Picker.Item
-                    label="CAVALO 3 EX | VANDERLEIA 4 EX"
-                    value="CAVALO 3 EX | VANDERLEIA 4 EX"
-                  />
-
-                  <Picker.Item
-                    label="CAVALO 2 EX | CARRETA 3 EX"
-                    value="CAVALO 2 EX | CARRETA 3 EX"
-                  />
-
-                  <Picker.Item
-                    label="CAVALO 3 EX | CARRETA 3 EX"
-                    value="CAVALO 3 EX | CARRETA 3 EX"
-                  />
-
-                  <Picker.Item
-                    label="CAVALO 3 EX | CARRETA 4 EX"
-                    value="CAVALO 3 EX | CARRETA 4 EX"
-                  />
-
-                  <Picker.Item
-                    label="CAVALO 4 EX | CARRETA 3 EX"
-                    value="CAVALO 4 EX | CARRETA 3 EX"
-                  />
-
-                  <Picker.Item
-                    label="RODO-TREM 3X3 9 EX"
-                    value="RODO-TREM 3X3 9 EX"
-                  />
-
-                  <Picker.Item
-                    label="RODO-TREM DOLLY 9 EX"
-                    value="RODO-TREM DOLLY 9 EX"
-                  />
-
-                  <Picker.Item label="OUTRO" value="OUTRO" />
-                </Picker>
-              </View>
-
-              <View style={styles.radioContainer}>
-                <RadioButton
-                  value="first"
-                  color="#eb001b"
-                  label="Próprio"
-                  theme="#fff"
-                  status={checked === "Próprio" ? "checked" : "unchecked"}
-                  onPress={() => {
-                    setChecked("Próprio");
-                  }}
-                />
-                <Text
-                  style={{
-                    fontWeight: "bold",
-                    marginRight: 30,
-                    color: "#000",
-                  }}
-                >
-                  Próprio
-                </Text>
-                <RadioButton
-                  value="second"
-                  color="#eb001b"
-                  label="Terceiro"
-                  status={checked === "Terceiro" ? "checked" : "unchecked"}
-                  onPress={() => {
-                    setChecked("Terceiro");
-                  }}
-                />
-                <Text
-                  style={{
-                    fontWeight: "bold",
-                    color: "#000",
-                  }}
-                >
-                  Terceiro
-                </Text>
-              </View>
-
-              <Text style={styles.textSection}>Carreta</Text>
-
-              <View style={styles.buttonShort}>
-                <TextInput
-                  keyboardType="default"
-                  onChangeText={(text) => setBoard_cart(text)}
-                  value={board_cart}
-                  underlineColorAndroid="transparent"
-                  placeholder="Placa"
-                  placeholderTextColor="#000"
-                  style={styles.inputShort}
-                />
-                <View style={styles.PickerView2}>
+                <View style={styles.PickerView}>
                   <Picker
                     mode={"dropdown"}
-                    style={styles.picker2}
+                    style={styles.picker}
                     selectedValue={stateCarreta.carreta}
                     onValueChange={(itemValue, itemIndex) =>
                       setStateCarreta({
@@ -307,24 +83,14 @@ const VehicleModal = ({ sync }) => {
                       })
                     }
                   >
+                    <Picker.Item label="Radar" value="Radar" />
+                    <Picker.Item label="Semaforo" value="Semaforo" />
                     <Picker.Item
-                      label="Tipo de carreta/carroceria"
-                      value="none"
+                      label="Acidente ou congestionamento"
+                      value="Atencao"
                     />
-                    <Picker.Item label="BASCULANTE" value="BASCULANTE" />
-                    <Picker.Item label="BAU" value="BAU" />
-                    <Picker.Item
-                      label="BAU REFRIGERADO"
-                      value="BAU REFRIGERADO"
-                    />
-                    <Picker.Item label="CONTAINER" value="CONTAINER" />
-                    <Picker.Item label="GAIOLA" value="GAIOLA" />
-                    <Picker.Item label="GRADE BAIXA" value="GRADE BAIXA" />
-                    <Picker.Item label="GRANELEIRO" value="GRANELEIRO" />
-                    <Picker.Item label="HOPPER" value="HOPPER" />
-                    <Picker.Item label="PISO MOVEL" value="PISO MOVEL" />
-                    <Picker.Item label="SIDER" value="SIDER" />
-                    <Picker.Item label="TANQUE" value="TANQUE" />
+                    <Picker.Item label="Restaurante" value="Restaurante" />
+                    <Picker.Item label="Posto de Saúde" value="Hospital" />
                   </Picker>
                 </View>
               </View>
@@ -335,11 +101,7 @@ const VehicleModal = ({ sync }) => {
                   color={Colors.red800}
                 />
               ) : (
-                <Button
-                  color="#eb001b"
-                  mode="contained"
-                  onPress={createNewVehicle}
-                >
+                <Button color="#eb001b" mode="contained">
                   GRAVAR
                 </Button>
               )}
@@ -347,10 +109,14 @@ const VehicleModal = ({ sync }) => {
           </View>
         </View>
       </Modal>
-      <RectButton onPress={() => setModalVisible(true)}>
-        <Ionicons name="add-circle-outline" size={30} color="#fff" />
-      </RectButton>
     </View>
+    <FAB
+    style={styles.fab}
+    loading={false}
+    icon="plus"
+    onPress={() => setModalVisible(true)}
+  />
+    </>
   );
 };
 
@@ -447,6 +213,13 @@ const styles = StyleSheet.create({
   },
   buttonShort: {
     flexDirection: "row",
+  },
+  fab: {
+    backgroundColor: "#eb001b",
+    position: "absolute",
+    margin: 10,
+    right: 0,
+    bottom: 0,
   },
 });
 

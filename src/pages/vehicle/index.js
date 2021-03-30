@@ -165,14 +165,16 @@ export default function Vehicle({ route }) {
 
           <View style={styles.buttonShort}>
             <TextInput
+              maxLength={10}
               keyboardType="default"
-              placeholder="Placa"
+              placeholder="Placa-UF"
               placeholderTextColor="#000"
               style={styles.inputShort}
               onChangeText={(text) => setBoard(text)}
               value={board}
             />
             <TextInput
+              maxLength={14}
               keyboardType="numeric"
               placeholder="RNTRC"
               placeholderTextColor="#000"
@@ -279,8 +281,9 @@ export default function Vehicle({ route }) {
 
           <View style={styles.buttonShort}>
             <TextInput
+              maxLength={10}
               keyboardType="default"
-              placeholder="Placa"
+              placeholder="Placa-UF"
               placeholderTextColor="#000"
               style={styles.inputShort}
               onChangeText={(text) => setBoard_cart(text)}

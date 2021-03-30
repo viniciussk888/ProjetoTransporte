@@ -97,6 +97,7 @@ export default function Login() {
         </View>
 
         <TextInput
+          maxLength={14}
           placeholderTextColor="#000"
           keyboardType="numeric"
           placeholder="CPF ou CNPJ"
