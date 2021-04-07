@@ -39,83 +39,82 @@ const VehicleModal = ({ sync }) => {
 
   return (
     <>
-    <View style={styles.centeredView}>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View style={styles.closeButonView}>
-              <Button
-                style={styles.closeButon}
-                color="#eb001b"
-                onPress={() => setModalVisible(!modalVisible)}
-              >
-                <AntDesign
+      <View style={styles.centeredView}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <View style={styles.closeButonView}>
+                <Button
                   style={styles.closeButon}
-                  name="closecircle"
-                  size={30}
-                  color="red"
-                />
-              </Button>
-            </View>
-
-            <View style={styles.buttonsContainer}>
-              <Text style={styles.textSection}>
-                Adicione dados ao mapa para ajudar os companheiros de viagem
-              </Text>
+                  color="#eb001b"
+                  onPress={() => setModalVisible(!modalVisible)}
+                >
+                  <AntDesign
+                    style={styles.closeButon}
+                    name="closecircle"
+                    size={30}
+                    color="red"
+                  />
+                </Button>
+              </View>
 
               <View style={styles.buttonsContainer}>
+                <Text style={styles.textSection}>
+                  Adicione dados ao mapa para ajudar os companheiros de viagem
+                </Text>
 
-                <View style={styles.PickerView}>
-                  <Picker
-                    mode={"dropdown"}
-                    style={styles.picker}
-                    selectedValue={stateCarreta.carreta}
-                    onValueChange={(itemValue, itemIndex) =>
-                      setStateCarreta({
-                        carreta: itemValue,
-                      })
-                    }
-                  >
-                    <Picker.Item label="Radar" value="Radar" />
-                    <Picker.Item label="Semaforo" value="Semaforo" />
-                    <Picker.Item
-                      label="Acidente ou congestionamento"
-                      value="Atencao"
-                    />
-                    <Picker.Item label="Restaurante" value="Restaurante" />
-                    <Picker.Item label="Posto de Saúde" value="Hospital" />
-                  </Picker>
+                <View style={styles.buttonsContainer}>
+                  <View style={styles.PickerView}>
+                    <Picker
+                      mode={"dropdown"}
+                      style={styles.picker}
+                      selectedValue={stateCarreta.carreta}
+                      onValueChange={(itemValue, itemIndex) =>
+                        setStateCarreta({
+                          carreta: itemValue,
+                        })
+                      }
+                    >
+                      <Picker.Item label="Radar" value="Radar" />
+                      <Picker.Item label="Semaforo" value="Semaforo" />
+                      <Picker.Item
+                        label="Acidente ou congestionamento"
+                        value="Atencao"
+                      />
+                      <Picker.Item label="Restaurante" value="Restaurante" />
+                      <Picker.Item label="Posto de Saúde" value="Hospital" />
+                    </Picker>
+                  </View>
                 </View>
+                {loading ? (
+                  <ActivityIndicator
+                    size="large"
+                    animating={true}
+                    color={Colors.red800}
+                  />
+                ) : (
+                  <Button color="#eb001b" mode="contained">
+                    GRAVAR
+                  </Button>
+                )}
               </View>
-              {loading ? (
-                <ActivityIndicator
-                  size="large"
-                  animating={true}
-                  color={Colors.red800}
-                />
-              ) : (
-                <Button color="#eb001b" mode="contained">
-                  GRAVAR
-                </Button>
-              )}
             </View>
           </View>
-        </View>
-      </Modal>
-    </View>
-    <FAB
-    style={styles.fab}
-    loading={false}
-    icon="plus"
-    onPress={() => setModalVisible(true)}
-  />
+        </Modal>
+      </View>
+      <FAB
+        style={styles.fab}
+        loading={false}
+        icon="plus"
+        onPress={() => setModalVisible(true)}
+      />
     </>
   );
 };

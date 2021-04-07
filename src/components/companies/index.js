@@ -7,9 +7,9 @@ function Companies({company}) {
 
   return (
     <View style={styles.container}>
-      <Image resizeMode='stretch' style={styles.logo} source={{uri:"https://i.pinimg.com/originals/ce/a7/0b/cea70b697fe2ca6770876b7250638e47.jpg"}} />
+      <Image resizeMode='stretch' style={styles.logo} source={{uri:company.imageURL}} />
       <RectButton>
-      <Text style={styles.title}>Construção Moreira aguia filho junior marques sousa</Text>
+      <Text style={styles.title}>{company.name}</Text>
       </RectButton>
     </View>
   )

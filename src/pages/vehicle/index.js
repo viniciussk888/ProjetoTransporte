@@ -34,7 +34,7 @@ export default function Vehicle({ route }) {
   });
 
   function navigateToLoginOrBack() {
-    if(routeOrigin==='register'){
+    if (routeOrigin === "register") {
       Alert.alert(
         "ATENÇÃO",
         "Dados cadastrados! Faça login na plataforma e aguarde sua aprovação."
@@ -46,11 +46,10 @@ export default function Vehicle({ route }) {
           },
         ],
       });
-    }else if(routeOrigin==='profile'){
-      sync()
+    } else if (routeOrigin === "profile") {
+      sync();
       navigation.goBack();
     }
-    
   }
 
   function confirmRegister() {

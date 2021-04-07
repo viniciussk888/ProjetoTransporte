@@ -3,9 +3,10 @@ import { View, Text, ScrollView, SafeAreaView, Image } from "react-native";
 import MapView, { Marker, Callout } from "react-native-maps";
 import { getCurrentPositionAsync } from "expo-location";
 import mapStyle from "../../utils/mapStyle.json";
-import VehicleModal from '../../components/vehicleModal'
+import VehicleModal from "../../components/vehicleModal";
 import styles from "./styles";
 import Companies from "../../components/companies";
+import api from '../../services/api'
 //icons
 import PostoGasolina from "../../assets/images/marker-icons/gasolina.png";
 import Semaforo from "../../assets/images/marker-icons/semaforo.png";
@@ -16,6 +17,13 @@ import Hospital from "../../assets/images/marker-icons/hospital.png";
 
 function Locations() {
   const [currentRegion, setCurrentRegion] = useState(null);
+
+  const [locations, setLocations] = useState([]);
+  const [companies, setCompanies] = useState([]);
+
+  function handleRegionChanged(region) {
+    setCurrentRegion(region);
+  }
 
   useEffect(() => {
     async function loadInitialPosition() {
@@ -35,9 +43,29 @@ function Locations() {
     loadInitialPosition();
   }, []);
 
-  function handleRegionChanged(region) {
-    setCurrentRegion(region);
-  }
+  useEffect(()=>{
+    async function getLocations(){
+      try {
+        const response = await api.get('locations')
+        setLocations(response.data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getLocations()
+  },[])
+
+  useEffect(()=>{
+    async function getCompanies(){
+      try {
+        const response = await api.get('companies')
+        setCompanies(response.data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getCompanies()
+  },[])
 
   return (
     <>
@@ -55,12 +83,9 @@ function Locations() {
 
           <SafeAreaView style={{ marginBottom: 5 }}>
             <ScrollView horizontal>
-              <Companies />
-              <Companies />
-              <Companies />
-              <Companies />
-              <Companies />
-              <Companies />
+              {companies.map((company)=>(
+                <Companies key={company.id} company={company} />
+              ))}
             </ScrollView>
           </SafeAreaView>
         </View>
@@ -74,20 +99,41 @@ function Locations() {
           initialRegion={currentRegion}
           style={styles.map}
         >
-          <Marker
+          {locations.map(location=>(
+            <Marker
+            key={location.id}
             coordinate={{
-              latitude: -7.5248189,
-              longitude: -46.0487098,
+              latitude: parseFloat(location.latitude),
+              longitude: parseFloat(location.longitude),
             }}
           >
             <Image style={styles.avatar} source={PostoGasolina} />
             <Callout>
               <View style={styles.callout}>
-                <Text style={styles.Name}>POSTO DO JOSE maravilha lucas</Text>
-                <Text style={styles.Bio}>Ver mais</Text>
+                <Text style={styles.Name}>{location.name}</Text>
+                <Text style={styles.Bio}>{location.description}</Text>
               </View>
             </Callout>
           </Marker>
+          ))}
+          {companies.map(company=>(
+            <Marker
+            key={company.id}
+            coordinate={{
+              latitude: parseFloat(company.latitude),
+              longitude: parseFloat(company.longitude),
+            }}
+          >
+            <Image style={styles.avatarCompanies} source={{uri:company.imageURL}} />
+            <Callout>
+              <View style={styles.callout}>
+                <Text style={styles.Name}>{company.name}</Text>
+                <Text style={styles.Bio}>{company.description}</Text>
+                <Text style={styles.Name}>VER DETALHES</Text>
+              </View>
+            </Callout>
+          </Marker>
+          ))}
         </MapView>
         <VehicleModal />
       </View>

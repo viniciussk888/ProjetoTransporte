@@ -6,10 +6,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     width: 150,
     height: 95,
-    padding: 3,
+    padding: 2,
     marginRight: 10,
     borderRadius: 8,
-    backgroundColor: '#eb001b'
+    backgroundColor: '#fff'
   },
   logo:{
     width:'100%',
@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
     borderRadius:8
   },
   title: {
+    marginTop:5,
     fontFamily: 'Archivo_400Regular',
     fontSize: 10,
     color: "#fff"

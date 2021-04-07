@@ -37,21 +37,29 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 38,
+    height: 38
+  },
+  avatarCompanies: {
+    width: 38,
     height: 38,
+    borderRadius:8,
+    borderWidth:2,
+    borderColor:"#000"
   },
   callout: {
-    alignItems:'center',
+    alignItems: "center",
     width: 180,
   },
   Name: {
-    fontFamily:'Archivo_700Bold',
+    fontFamily: "Archivo_700Bold",
     fontWeight: "bold",
     fontSize: 12,
   },
   Bio: {
     color: "#666",
+    fontSize: 10,
     marginTop: 3,
-  }
+  },
 });
 
 export default styles;
