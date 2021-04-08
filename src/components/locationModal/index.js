@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   TextInput,
   Modal,
@@ -7,35 +7,64 @@ import {
   View,
   Picker,
   Alert,
-  Image,
 } from "react-native";
-import { Ionicons, AntDesign } from "@expo/vector-icons";
-import { RectButton } from "react-native-gesture-handler";
-import {
-  Button,
-  RadioButton,
-  ActivityIndicator,
-  Colors,
-} from "react-native-paper";
+import { AntDesign } from "@expo/vector-icons";
+import { Button, ActivityIndicator, Colors } from "react-native-paper";
 import api from "../../services/api";
 import { useSelector } from "react-redux";
 import { FAB } from "react-native-paper";
+import AsyncStorage from "@react-native-community/async-storage";
 
-const VehicleModal = ({ sync }) => {
+const LocationModal = ({ sync, coords }) => {
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const user_id = useSelector((state) => state.id);
-  const [board, setBoard] = useState("");
-  const [rntrc, setRntrc] = useState("");
-  const [board_cart, setBoard_cart] = useState("");
-  const [photoURL, setPhotoURL] = useState("");
-  const [checked, setChecked] = useState("Próprio"); //property
-  const [stateVehicle, setStateVehicle] = useState({
-    vehicle: "Selecione",
-  }); //type_vehicle
-  const [stateCarreta, setStateCarreta] = useState({
-    carreta: "Selecione",
-  }); //type_cart
+  const [name, setName] = useState({
+    nameLocation: "Combustivel",
+  });
+  const [description, setDescription] = useState("");
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${useSelector((state) => state.token)}`,
+    },
+  };
+
+  async function createLocation() {
+    if (
+      name.nameLocation === "" ||
+      name.nameLocation === null ||
+      description === ""
+    ) {
+      return Alert.alert("ATENÇÂO", "Descreva o tipo e descrição do local!");
+    }
+    setLoading(true);
+    const city = await AsyncStorage.getItem("city");
+    const uf = await AsyncStorage.getItem("uf");
+
+    try {
+      const response = await api.post(
+        "locations",
+        {
+          name: name.nameLocation,
+          description,
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+          city,
+          uf: uf.trim(),
+        },
+        config
+      );
+      if (response.status === 201) {
+        sync();
+        setLoading(false);
+        return setModalVisible(!modalVisible);
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      Alert.alert("ERROR", error);
+    }
+  }
 
   return (
     <>
@@ -75,13 +104,17 @@ const VehicleModal = ({ sync }) => {
                     <Picker
                       mode={"dropdown"}
                       style={styles.picker}
-                      selectedValue={stateCarreta.carreta}
+                      selectedValue={name.nameLocation}
                       onValueChange={(itemValue, itemIndex) =>
-                        setStateCarreta({
-                          carreta: itemValue,
+                        setName({
+                          nameLocation: itemValue,
                         })
                       }
                     >
+                      <Picker.Item
+                        label="Posto de Combustivel"
+                        value="Combustivel"
+                      />
                       <Picker.Item label="Radar" value="Radar" />
                       <Picker.Item label="Semaforo" value="Semaforo" />
                       <Picker.Item
@@ -92,6 +125,17 @@ const VehicleModal = ({ sync }) => {
                       <Picker.Item label="Posto de Saúde" value="Hospital" />
                     </Picker>
                   </View>
+                  <TextInput
+                    clearTextOnFocus={true}
+                    maxLength={400}
+                    autoCapitalize="characters"
+                    keyboardType="default"
+                    placeholder="Descrição do local"
+                    placeholderTextColor="#000"
+                    style={styles.input}
+                    value={description}
+                    onChangeText={(text) => setDescription(text)}
+                  />
                 </View>
                 {loading ? (
                   <ActivityIndicator
@@ -100,7 +144,11 @@ const VehicleModal = ({ sync }) => {
                     color={Colors.red800}
                   />
                 ) : (
-                  <Button color="#eb001b" mode="contained">
+                  <Button
+                    onPress={createLocation}
+                    color="#eb001b"
+                    mode="contained"
+                  >
                     GRAVAR
                   </Button>
                 )}
@@ -152,33 +200,9 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     padding: 10,
   },
-  input: {
-    borderRadius: 8,
-    width: "100%",
-    fontFamily: "Archivo_700Bold",
-    fontSize: 16,
-    height: 38,
-    padding: 5,
-    borderWidth: 1,
-    borderColor: "#000",
-    backgroundColor: "#fff",
-    marginVertical: 5,
-  },
   textSection: {
     color: "#000",
     fontFamily: "Poppins_600SemiBold",
-  },
-  inputShort: {
-    borderRadius: 8,
-    width: "50%",
-    fontFamily: "Archivo_400Regular",
-    fontSize: 20,
-    height: 44,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: "#000",
-    backgroundColor: "#fff",
-    marginRight: 5,
   },
   PickerView: {
     marginVertical: 10,
@@ -192,26 +216,16 @@ const styles = StyleSheet.create({
     fontSize: 20,
     backgroundColor: "#fff",
   },
-  PickerView2: {
-    width: "50%",
+  input: {
+    maxWidth: "100%",
+    fontFamily: "Archivo_400Regular",
+    fontSize: 14,
+    height: 44,
+    padding: 10,
     borderWidth: 1,
     borderColor: "#000",
     backgroundColor: "#fff",
-    marginBottom: 40,
-  },
-  picker2: {
-    width: "100%",
-    fontFamily: "Archivo_400Regular",
-    fontSize: 20,
-    height: 40,
-    backgroundColor: "#fff",
-  },
-  radioContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  buttonShort: {
-    flexDirection: "row",
+    marginVertical: 5,
   },
   fab: {
     backgroundColor: "#eb001b",
@@ -222,4 +236,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default VehicleModal;
+export default LocationModal;

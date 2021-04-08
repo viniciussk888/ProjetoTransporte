@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, SafeAreaView, Image } from "react-native";
 import MapView, { Marker, Callout } from "react-native-maps";
-import { getCurrentPositionAsync } from "expo-location";
+import { Accuracy, getCurrentPositionAsync } from "expo-location";
 import mapStyle from "../../utils/mapStyle.json";
-import VehicleModal from "../../components/vehicleModal";
+import LocationModal from "../../components/locationModal";
 import styles from "./styles";
 import Companies from "../../components/companies";
-import api from '../../services/api'
+import api from "../../services/api";
+import AsyncStorage from "@react-native-community/async-storage";
 //icons
-import PostoGasolina from "../../assets/images/marker-icons/gasolina.png";
+import Combustivel from "../../assets/images/marker-icons/gasolina.png";
 import Semaforo from "../../assets/images/marker-icons/semaforo.png";
 import Atencao from "../../assets/images/marker-icons/atencao.png";
 import Radar from "../../assets/images/marker-icons/radar.png";
@@ -20,15 +21,20 @@ function Locations() {
 
   const [locations, setLocations] = useState([]);
   const [companies, setCompanies] = useState([]);
+  const [reload, setReload] = useState(0);
 
   function handleRegionChanged(region) {
     setCurrentRegion(region);
   }
 
+  function sync(){
+    setReload(Math.random)
+  }
+
   useEffect(() => {
     async function loadInitialPosition() {
       const { coords } = await getCurrentPositionAsync({
-        enableHighAccuracy: true,
+        enableHighAccuracy: true
       });
 
       const { latitude, longitude } = coords;
@@ -41,31 +47,66 @@ function Locations() {
       });
     }
     loadInitialPosition();
-  }, []);
+  }, [reload]);
 
-  useEffect(()=>{
-    async function getLocations(){
+  useEffect(() => {
+    async function fetchData() {
+      const uf = await AsyncStorage.getItem("uf");
+      const city = await AsyncStorage.getItem("city");
       try {
-        const response = await api.get('locations')
-        setLocations(response.data)
+        const response = await api.post("locations-region", {
+          city,
+          uf
+        });
+        if (response.status === 200) {
+          setLocations(response.data);
+        }
       } catch (error) {
-        console.log(error)
+        console.log(error);
+      }
+
+      try {
+        const response = await api.post("companies-region", {
+          city,
+          uf
+        });
+        if (response.status === 200) {
+          setCompanies(response.data);
+        }
+      } catch (error) {
+        console.log(error);
       }
     }
-    getLocations()
-  },[])
+    fetchData();
+  }, [reload]);
 
-  useEffect(()=>{
-    async function getCompanies(){
-      try {
-        const response = await api.get('companies')
-        setCompanies(response.data)
-      } catch (error) {
-        console.log(error)
-      }
+  function dimamicAvatar(avatarName) {
+    var result = "";
+    switch (avatarName) {
+      case "Combustivel":
+        result = Combustivel;
+        break;
+      case "Radar":
+        result = Radar;
+        break;
+      case "Semaforo":
+        result = Semaforo;
+        break;
+      case "Atencao":
+        result = Atencao;
+        break;
+      case "Restaurante":
+        result = Restaurante;
+        break;
+      case "Hospital":
+        result = Hospital;
+        break;
+      default:
+        result = "Atencao";
+        break;
     }
-    getCompanies()
-  },[])
+    return result;
+  }
 
   return (
     <>
@@ -83,7 +124,7 @@ function Locations() {
 
           <SafeAreaView style={{ marginBottom: 5 }}>
             <ScrollView horizontal>
-              {companies.map((company)=>(
+              {companies.map((company) => (
                 <Companies key={company.id} company={company} />
               ))}
             </ScrollView>
@@ -99,43 +140,51 @@ function Locations() {
           initialRegion={currentRegion}
           style={styles.map}
         >
-          {locations.map(location=>(
+          {locations.map((location) => (
             <Marker
-            key={location.id}
-            coordinate={{
-              latitude: parseFloat(location.latitude),
-              longitude: parseFloat(location.longitude),
-            }}
-          >
-            <Image style={styles.avatar} source={PostoGasolina} />
-            <Callout>
-              <View style={styles.callout}>
-                <Text style={styles.Name}>{location.name}</Text>
-                <Text style={styles.Bio}>{location.description}</Text>
-              </View>
-            </Callout>
-          </Marker>
+              key={location.id}
+              coordinate={{
+                latitude: parseFloat(location.latitude),
+                longitude: parseFloat(location.longitude),
+              }}
+            >
+              <Image
+                style={styles.avatar}
+                source={dimamicAvatar(location.name)}
+              />
+              <Callout>
+                <View style={styles.callout}>
+                  <Text style={styles.Name}>{location.name}</Text>
+                  <Text style={styles.Bio}>{location.description}</Text>
+                </View>
+              </Callout>
+            </Marker>
           ))}
-          {companies.map(company=>(
+          {companies.map((company) => (
             <Marker
-            key={company.id}
-            coordinate={{
-              latitude: parseFloat(company.latitude),
-              longitude: parseFloat(company.longitude),
-            }}
-          >
-            <Image style={styles.avatarCompanies} source={{uri:company.imageURL}} />
-            <Callout>
-              <View style={styles.callout}>
-                <Text style={styles.Name}>{company.name}</Text>
-                <Text style={styles.Bio}>{company.description}</Text>
-                <Text style={styles.Name}>VER DETALHES</Text>
-              </View>
-            </Callout>
-          </Marker>
+              key={company.id}
+              coordinate={{
+                latitude: parseFloat(company.latitude),
+                longitude: parseFloat(company.longitude),
+              }}
+            >
+              <Image
+                style={styles.avatarCompanies}
+                source={{ uri: company.imageURL }}
+              />
+              <Callout>
+                <View style={styles.callout}>
+                  <Text style={styles.Name}>{company.name}</Text>
+                  <Text style={styles.Bio}>{company.description}</Text>
+                  <Text style={styles.Name}>VER DETALHES</Text>
+                </View>
+              </Callout>
+            </Marker>
           ))}
         </MapView>
-        <VehicleModal />
+        {currentRegion!==null&&
+        <LocationModal sync={sync} coords={currentRegion} />
+        }
       </View>
     </>
   );

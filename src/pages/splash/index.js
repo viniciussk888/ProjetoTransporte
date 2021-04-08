@@ -26,9 +26,10 @@ export default function Splash() {
 
       const adressArray = response.results[0].formatted_address.split(',')
       const CityAndUfArray = adressArray[2].split('-');
-
-      await AsyncStorage.setItem('city', CityAndUfArray[0].toUpperCase());
-      await AsyncStorage.setItem('uf', CityAndUfArray[1].toUpperCase());
+      const cityFormated = CityAndUfArray[0].substring(1, CityAndUfArray[0].length-1);
+      
+      await AsyncStorage.setItem('city', cityFormated.toUpperCase());
+      await AsyncStorage.setItem('uf', CityAndUfArray[1].trim());
       
     } catch (error) {
       Alert.alert(
