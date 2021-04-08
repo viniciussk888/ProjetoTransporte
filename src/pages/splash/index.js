@@ -8,6 +8,7 @@ import {useSelector } from "react-redux";
 import Geocoder from 'react-native-geocoding';
 import TruckAnimation from "../../assets/animations/truck.json";
 import Lottie from "lottie-react-native";
+import APIKEY from '../../../env'
 
 export default function Splash() {
   const navigation = useNavigation();
@@ -21,13 +22,13 @@ export default function Splash() {
       const { latitude, longitude } = coords;
       await AsyncStorage.setItem('latitude', latitude.toString());
       await AsyncStorage.setItem('longitude', longitude.toString());
-      Geocoder.init("AIzaSyC2E_1QPwbcMjsUET5cAoPTEdXabXnefFw", {language : "pt-br"});
+      Geocoder.init(`${APIKEY}`, {language : "pt-br"});
       const response = await Geocoder.from({ latitude, longitude });
 
       const adressArray = response.results[0].formatted_address.split(',')
       const CityAndUfArray = adressArray[2].split('-');
       const cityFormated = CityAndUfArray[0].substring(1, CityAndUfArray[0].length-1);
-      
+
       await AsyncStorage.setItem('city', cityFormated.toUpperCase());
       await AsyncStorage.setItem('uf', CityAndUfArray[1].trim());
       
