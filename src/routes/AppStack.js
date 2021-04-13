@@ -10,6 +10,7 @@ import Vehicle from "../pages/vehicle";
 import Splash from "../pages/splash";
 import Search from "../pages/search";
 import FreightDetails from "../pages/freightDetails";
+import CompanyDetails from "../pages/companyDetails";
 
 import MainTabs from "./MainTabs";
 
@@ -30,6 +31,7 @@ export default function AppStack() {
         <Screen name="vehicle" component={Vehicle} />
         <Screen name="freightDetails" component={FreightDetails} />
         <Screen name="search" component={Search} />
+        <Screen name="companyDetails" component={CompanyDetails} />
         <Screen name="Main" component={MainTabs} />
       </Navigator>
     </NavigationContainer>

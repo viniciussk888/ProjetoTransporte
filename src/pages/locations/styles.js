@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   textCategory: {
-    marginTop: 10,
+    marginVertical: 10,
     fontFamily: "Archivo_400Regular",
     color: "#fff",
     fontSize: 14,
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   },
   callout: {
     alignItems: "center",
-    width: 180,
+    width: 185,
   },
   Name: {
     fontFamily: "Archivo_700Bold",

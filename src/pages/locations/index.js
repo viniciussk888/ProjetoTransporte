@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, SafeAreaView, Image } from "react-native";
 import MapView, { Marker, Callout } from "react-native-maps";
-import { Accuracy, getCurrentPositionAsync } from "expo-location";
+import { getCurrentPositionAsync } from "expo-location";
 import mapStyle from "../../utils/mapStyle.json";
 import LocationModal from "../../components/locationModal";
 import styles from "./styles";
 import Companies from "../../components/companies";
 import api from "../../services/api";
 import AsyncStorage from "@react-native-community/async-storage";
+import { useNavigation } from "@react-navigation/native";
 //icons
 import Combustivel from "../../assets/images/marker-icons/gasolina.png";
 import Semaforo from "../../assets/images/marker-icons/semaforo.png";
@@ -15,10 +16,11 @@ import Atencao from "../../assets/images/marker-icons/atencao.png";
 import Radar from "../../assets/images/marker-icons/radar.png";
 import Restaurante from "../../assets/images/marker-icons/restaurante.png";
 import Hospital from "../../assets/images/marker-icons/hospital.png";
+import { RectButton } from "react-native-gesture-handler";
 
 function Locations() {
   const [currentRegion, setCurrentRegion] = useState(null);
-
+  const { navigate } = useNavigation();
   const [locations, setLocations] = useState([]);
   const [companies, setCompanies] = useState([]);
   const [reload, setReload] = useState(0);
@@ -27,14 +29,20 @@ function Locations() {
     setCurrentRegion(region);
   }
 
-  function sync(){
-    setReload(Math.random)
+  function sync() {
+    setReload(Math.random);
+  }
+
+  function navigateToCompanyDetails(company) {
+    navigate("companyDetails", {
+      company: company,
+    });
   }
 
   useEffect(() => {
     async function loadInitialPosition() {
       const { coords } = await getCurrentPositionAsync({
-        enableHighAccuracy: true
+        enableHighAccuracy: true,
       });
 
       const { latitude, longitude } = coords;
@@ -56,7 +64,7 @@ function Locations() {
       try {
         const response = await api.post("locations-region", {
           city,
-          uf
+          uf,
         });
         if (response.status === 200) {
           setLocations(response.data);
@@ -68,7 +76,7 @@ function Locations() {
       try {
         const response = await api.post("companies-region", {
           city,
-          uf
+          uf,
         });
         if (response.status === 200) {
           setCompanies(response.data);
@@ -125,7 +133,11 @@ function Locations() {
           <SafeAreaView style={{ marginBottom: 5 }}>
             <ScrollView horizontal>
               {companies.map((company) => (
-                <Companies key={company.id} company={company} />
+                <RectButton onPress={() => navigateToCompanyDetails(company)}>
+                  <View>
+                    <Companies key={company.id} company={company} />
+                  </View>
+                </RectButton>
               ))}
             </ScrollView>
           </SafeAreaView>
@@ -172,7 +184,7 @@ function Locations() {
                 style={styles.avatarCompanies}
                 source={{ uri: company.imageURL }}
               />
-              <Callout>
+              <Callout onPress={() => navigateToCompanyDetails(company)}>
                 <View style={styles.callout}>
                   <Text style={styles.Name}>{company.name}</Text>
                   <Text style={styles.Bio}>{company.description}</Text>
@@ -182,9 +194,9 @@ function Locations() {
             </Marker>
           ))}
         </MapView>
-        {currentRegion!==null&&
-        <LocationModal sync={sync} coords={currentRegion} />
-        }
+        {currentRegion !== null && (
+          <LocationModal sync={sync} coords={currentRegion} />
+        )}
       </View>
     </>
   );
