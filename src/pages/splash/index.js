@@ -39,7 +39,7 @@ export default function Splash() {
         [
           {
             text: "OK",
-            onPress: () => BackHandler.exitApp(),
+          //  onPress: () => BackHandler.exitApp(),
           },
         ]
       );
@@ -54,11 +54,11 @@ export default function Splash() {
     } else {
       Alert.alert(
         "Atenção",
-        "O App precisa de permissão de localização para inicializar!",
+        "O App precisa de permissão de localização para funcionar perfeitamente!",
         [
           {
             text: "OK",
-            onPress: () => BackHandler.exitApp(),
+           // onPress: () => BackHandler.exitApp(),
           },
         ]
       );

@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RectButton } from "react-native-gesture-handler";
-import { Button, ActivityIndicator, Colors } from "react-native-paper";
+import { Button, ActivityIndicator } from "react-native-paper";
 import api from "../../services/api";
 import styles from "./styles";
 import TruckAnimation from "../../assets/animations/truck.json";
@@ -40,7 +40,7 @@ export default function Login() {
   async function signin() {
     setLoading(true);
     if (document === "" || password === "") {
-      alert("Preencha todas as credenciais de acesso!");
+      Alert.alert("ATENÇÃO","Preencha todas as credenciais!");
       setLoading(false);
       return;
     }
@@ -70,15 +70,14 @@ export default function Login() {
         Alert.alert("AVISO:", "Credenciais de acesso incorreta!");
         return;
       }
-      Alert.alert("#catchError:", " Ocorreu uma falha ao fazer login!");
+      Alert.alert("Error", "Ocorreu uma falha ao fazer login!");
       console.log(error.response);
     }
   }
 
   return (
     <>
-      <KeyboardAvoidingView
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
+      <View
         style={styles.container}
       >
         <Lottie
@@ -95,7 +94,10 @@ export default function Login() {
             A plataforma que vai revolucionar o conceito de transporte!
           </Text>
         </View>
+<KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
 
+        >
         <TextInput
           maxLength={14}
           placeholderTextColor="#000"
@@ -114,18 +116,18 @@ export default function Login() {
           placeholderTextColor="#000"
           style={styles.input}
         />
+        </KeyboardAvoidingView>
 
         <View style={styles.buttonContainer}>
           {loading ? (
             <ActivityIndicator
               size="large"
               animating={true}
-              color={Colors.red800}
+              color="#fff"
             />
           ) : (
             <Button
               style={styles.buttonSignin}
-              color="#eb001b"
               mode="contained"
               onPress={signin}
             >
@@ -139,7 +141,7 @@ export default function Login() {
             <Text style={styles.titleRegister}>CRIAR UMA CONTA</Text>
           </RectButton>
         </View>
-      </KeyboardAvoidingView>
+      </View>
     </>
   );
 }

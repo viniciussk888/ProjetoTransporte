@@ -19,7 +19,7 @@ import { Provider as ReduxProvider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 
 export default function App() {
-  let [fontsLoaded] = useFonts({
+  const [fontsLoaded] = useFonts({
     Archivo_400Regular,
     Archivo_700Bold,
     Poppins_400Regular,

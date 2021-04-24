@@ -1,9 +1,11 @@
 import { StyleSheet } from "react-native";
+import color from '../../assets/colors'
+import font from '../../assets/fonts'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#19062b",
+    backgroundColor: color.background,
     justifyContent: "center",
     alignItems:'center',
     paddingHorizontal: 20,
@@ -14,7 +16,7 @@ const styles = StyleSheet.create({
   TitleText: {
     textAlign: 'center',
     fontSize: 38,
-    fontFamily: "Archivo_700Bold",
+    fontFamily: font.bold,
     color: "#fff"
   }
 });

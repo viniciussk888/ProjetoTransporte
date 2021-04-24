@@ -1,10 +1,12 @@
 import { StyleSheet } from "react-native";
+import colors from '../../assets/colors'
+import fonts from '../../assets/fonts'
 
 const styles = StyleSheet.create({
   container: {
     paddingTop: 30,
     paddingLeft: 20,
-    backgroundColor: "#19062b",
+    backgroundColor: colors.background,
   },
   topBar: {
     flexDirection: "row",
@@ -13,7 +15,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   title: {
-    fontFamily: "Archivo_700Bold",
+    fontFamily: fonts.bold,
     color: "#fff",
     fontSize: 20,
     lineHeight: 20,
