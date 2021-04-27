@@ -1,14 +1,16 @@
 import { StyleSheet } from "react-native";
+import colors from '../../assets/colors'
+import fonts from "../../assets/fonts";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#afb7bd",
+    backgroundColor: colors.background,
     padding: 20,
     paddingTop:80,
   },
   sectionText: {
-    fontFamily: "Archivo_700Bold",
+    fontFamily: fonts.bold,
     fontSize: 18,
     marginVertical: 10,
   },
@@ -21,25 +23,25 @@ const styles = StyleSheet.create({
   input: {
     borderRadius: 8,
     width: "100%",
-    fontFamily: "Archivo_400Regular",
+    fontFamily: fonts.textPrimary,
     fontSize: 20,
     height: 44,
     padding: 10,
     borderWidth: 1,
     borderColor: "#000",
-    backgroundColor: "#fff",
+    backgroundColor: colors.gray,
     marginVertical: 5,
   },
   inputShort: {
     borderRadius: 8,
     width: "50%",
-    fontFamily: "Archivo_400Regular",
+    fontFamily: fonts.textPrimary,
     fontSize: 20,
     height: 44,
     padding: 10,
     borderWidth: 1,
     borderColor: "#000",
-    backgroundColor: "#fff",
+    backgroundColor: colors.gray,
     marginRight: 5,
   },
   PickerView: {
@@ -50,10 +52,10 @@ const styles = StyleSheet.create({
   },
   picker: {
     width: "100%",
-    fontFamily: "Archivo_400Regular",
+    fontFamily: fonts.textPrimary,
     fontSize: 20,
     height: 40,
-    backgroundColor: "#fff",
+    backgroundColor: colors.gray,
   },
   PickerView2: {
     width: "50%",
@@ -62,10 +64,10 @@ const styles = StyleSheet.create({
   },
   picker2: {
     width: "100%",
-    fontFamily: "Archivo_400Regular",
+    fontFamily: fonts.textPrimary,
     fontSize: 20,
     height: 40,
-    backgroundColor: "#fff",
+    backgroundColor: colors.gray,
   },
   radioContainer: {
     flexDirection: "row",

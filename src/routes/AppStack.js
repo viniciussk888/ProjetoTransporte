@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 //pages
+import Change from "../pages/change";
 import Login from "../pages/login";
 import Home from "../pages/home";
 import Register from "../pages/register";
@@ -25,6 +26,7 @@ export default function AppStack() {
     }}
     >
         <Screen name="splash" component={Splash} />
+        <Screen name="change" component={Change} />
         <Screen name="login" component={Login} />
         <Screen name="home" component={Home} />
         <Screen name="register" component={Register} />

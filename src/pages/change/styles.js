@@ -31,6 +31,14 @@ const styles = StyleSheet.create({
     lineHeight: 25,
     marginBottom: 5,
   },
+  textButton: {
+    textAlign: "center",
+    fontFamily: font.bold,
+    color: color.white,
+    fontSize: 14,
+    lineHeight: 25,
+    marginBottom: 5,
+  },
   buttonContainer: {
     flexDirection: "column",
     justifyContent: "center",
@@ -45,9 +53,10 @@ const styles = StyleSheet.create({
   },
   input: {
     borderRadius: 8,
-    width: "100%",
+    width: 250,
     fontFamily: "Archivo_400Regular",
     fontSize: 20,
+    height: 44,
     padding: 10,
     borderWidth: 1,
     borderColor: "#000",
@@ -55,10 +64,16 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   buttonSignin: {
-    width: "100%",
-    marginTop: 15,
-    padding:7,
-    backgroundColor:color.green
+    width: 250,
+    marginTop: 30,
+    backgroundColor:color.green,
+    padding:20
+  },
+  buttonRegister: {
+    width: 250,
+    marginTop: 30,
+    backgroundColor:color.yellow,
+    padding:20
   },
 });
 

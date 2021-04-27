@@ -10,7 +10,7 @@ import {
 import api from "../../services/api";
 import Firebase from "../../services/firebase";
 import Header from "../../components/header";
-
+import colors from '../../assets/colors'
 import styles from "./styles";
 import { RectButton } from "react-native-gesture-handler";
 import { dateMask } from "../../utils/dateMask";
@@ -28,7 +28,7 @@ export default function Register() {
   const [checked, setChecked] = useState("PF");
   const [document, setDocument] = useState("");
   const [birthDate, setBirthDate] = useState("");
-  const [profileURL, setProfileURL] = useState("");
+  const [profileURL, setProfileURL] = useState("none");
 
   function confirmRegister() {
     Alert.alert("ATENÇÃO", "Confirma o seu cadastro com os dados informados?", [
@@ -86,7 +86,7 @@ export default function Register() {
     setLoading(true);
 
     if (
-      profileURL === "" ||
+      profileURL === "none" ||
       name === "" ||
       whatsapp === "" ||
       password === "" ||
@@ -146,7 +146,7 @@ export default function Register() {
 
   return (
     <>
-      <Header routeToBack="login" title="Informe os dados" />
+      <Header routeToBack="change" title="Informe os dados" />
       <ScrollView style={styles.container}>
         <View style={{ alignItems: "center" }}>
           <RectButton onPress={pickImage}>
@@ -158,11 +158,11 @@ export default function Register() {
                 borderRadius: 100,
                 borderColor: "#000",
                 borderWidth: 3,
-                backgroundColor: "#fff",
+                backgroundColor: colors.gray,
               }}
             />
           </RectButton>
-          <Text>Selecione uma foto</Text>
+          <Text style={{color:colors.white}}>Selecione uma foto</Text>
         </View>
 
         <View style={styles.buttonsContainer}>
@@ -193,29 +193,29 @@ export default function Register() {
             onChangeText={(text) => setPassword(text)}
           />
 
-          <Text style={{ fontWeight: "bold" }}>Tipo de Frete</Text>
+          <Text style={{color:colors.white }}>Tipo de Frete</Text>
 
           <View style={styles.radioContainer}>
             <RadioButton
               value="first"
-              color="#eb001b"
+              color={colors.green}
               label="PF"
               status={checked === "PF" ? "checked" : "unchecked"}
               onPress={() => {
                 setChecked("PF");
               }}
             />
-            <Text style={{ fontWeight: "bold", marginRight: 30 }}>PF</Text>
+            <Text style={{color:colors.white, fontWeight: "bold", marginRight: 30 }}>PF</Text>
             <RadioButton
               value="second"
-              color="#eb001b"
+              color={colors.green}
               label="PJ"
               status={checked === "PJ" ? "checked" : "unchecked"}
               onPress={() => {
                 setChecked("PJ");
               }}
             />
-            <Text style={{ fontWeight: "bold" }}>PJ</Text>
+            <Text style={{color:colors.white,fontWeight: "bold" }}>PJ</Text>
           </View>
 
           {checked === "PJ" ? (
@@ -264,7 +264,7 @@ export default function Register() {
             <Button
               onPress={confirmRegister}
               style={{ width: "100%" }}
-              color="#eb001b"
+              color={colors.green}
               mode="contained"
             >
               REGISTRAR
@@ -273,11 +273,11 @@ export default function Register() {
         </View>
 
         <View style={styles.termosContainer}>
-          <Text style={{ marginTop: 10, fontWeight: "bold" }}>
+          <Text style={{ color:colors.white ,marginTop: 10 }}>
             Estou ciente de todos os termos.
           </Text>
           <RectButton>
-            <Text style={{ fontWeight: "bold", color: "#7041EE" }}>
+            <Text style={{ fontWeight: "bold", color:colors.red }}>
               Ler termos & condições
             </Text>
           </RectButton>

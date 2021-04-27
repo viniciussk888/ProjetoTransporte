@@ -7,11 +7,10 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { RectButton } from "react-native-gesture-handler";
 import { Button, ActivityIndicator } from "react-native-paper";
 import api from "../../services/api";
 import styles from "./styles";
-import TruckAnimation from "../../assets/animations/truck.json";
+import SigninAnimation from "../../assets/animations/signin.json";
 import Lottie from "lottie-react-native";
 import { useDispatch } from "react-redux";
 
@@ -31,9 +30,6 @@ export default function Login() {
         name: 'Main'
       }]
     })
-  }
-  function navigateToRegister() {
-    navigation.navigate("register");
   }
 
   //funções
@@ -77,11 +73,12 @@ export default function Login() {
 
   return (
     <>
-      <View
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
         style={styles.container}
       >
         <Lottie
-          source={TruckAnimation}
+          source={SigninAnimation}
           autoPlay
           loop
           resizeMode="contain"
@@ -89,15 +86,11 @@ export default function Login() {
         />
 
         <View style={styles.titleContainer}>
-          <Text style={styles.titlePrimary}>Seja bem-vindo</Text>
           <Text style={styles.title}>
-            A plataforma que vai revolucionar o conceito de transporte!
+            Entre agora mesmo para encontrar os melhores fretes!
           </Text>
         </View>
-<KeyboardAvoidingView
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
 
-        >
         <TextInput
           maxLength={14}
           placeholderTextColor="#000"
@@ -116,9 +109,7 @@ export default function Login() {
           placeholderTextColor="#000"
           style={styles.input}
         />
-        </KeyboardAvoidingView>
 
-        <View style={styles.buttonContainer}>
           {loading ? (
             <ActivityIndicator
               size="large"
@@ -134,14 +125,8 @@ export default function Login() {
               Entrar
             </Button>
           )}
-          <RectButton
-            style={styles.buttonRegister}
-            onPress={navigateToRegister}
-          >
-            <Text style={styles.titleRegister}>CRIAR UMA CONTA</Text>
-          </RectButton>
-        </View>
-      </View>
+          
+      </KeyboardAvoidingView>
     </>
   );
 }

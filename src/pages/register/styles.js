@@ -1,9 +1,11 @@
 import { StyleSheet } from "react-native";
+import colors from '../../assets/colors'
+import fonts from "../../assets/fonts";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#afb7bd",
+    backgroundColor: colors.background,
     padding: 20,
   },
   buttonsContainer: {
@@ -15,13 +17,13 @@ const styles = StyleSheet.create({
   input: {
     borderRadius: 8,
     width: "100%",
-    fontFamily: "Archivo_400Regular",
+    fontFamily: fonts.textPrimary,
     fontSize: 20,
     height: 44,
     padding: 10,
     borderWidth: 1,
     borderColor: "#000",
-    backgroundColor: "#fff",
+    backgroundColor: colors.gray,
     marginVertical: 5,
   },
   radioContainer: {

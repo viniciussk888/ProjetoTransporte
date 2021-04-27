@@ -76,7 +76,7 @@ export default function Splash() {
       setTimeout(() => {
        navigation.reset({ 
         routes: [{
-          name: 'login'
+          name: 'change'
         }]
       })
       }, 3500);
