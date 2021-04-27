@@ -1,9 +1,11 @@
 import { StyleSheet } from "react-native";
+import colors from '../../assets/colors'
+import fonts from '../../assets/fonts'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#19062b",
+    backgroundColor: colors.background,
     paddingHorizontal: 20,
   },
   headerHomeContainer: {
@@ -12,16 +14,16 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 20,
     paddingVertical: 30,
-    backgroundColor: '#19062b'
+    backgroundColor: colors.background,
   },
   wellcomeText: {
     color: '#fff',
-    fontFamily: 'Poppins_600SemiBold',
+    fontFamily: fonts.semiBold,
     marginBottom: 5
   },
   cargasText: {
     color: '#fff',
-    fontFamily: 'Archivo_700Bold',
+    fontFamily: fonts.bold,
     marginBottom: 5
   }
 });

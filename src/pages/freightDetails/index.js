@@ -12,6 +12,7 @@ import mapStyle from '../../utils/mapStyle.json'
 import { useSelector } from "react-redux";
 import api from '../../services/api'
 import truckMarker from '../../assets/images/truck-marker.png'
+import colors from '../../assets/colors'
 
 
 function FreightDetails({ route }) {
@@ -160,7 +161,7 @@ function FreightDetails({ route }) {
           <FontAwesome5 style={{marginRight:10}} name="whatsapp-square" size={40} color="#34af23" />
           </RectButton>
           <RectButton onPress={sendPhoneCall}>
-          <FontAwesome name="phone-square" size={43} color="#eb001b" />
+          <FontAwesome name="phone-square" size={43} color={colors.red} />
           </RectButton>
         </View>
       </View>
@@ -198,7 +199,7 @@ function FreightDetails({ route }) {
           ) : (
           <Button
           style={{marginTop:20,marginBottom:40}}
-              color="#eb001b"
+              color={colors.green}
               mode="contained"
               onPress={CreateNewNegotiation}
             >

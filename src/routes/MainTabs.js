@@ -1,6 +1,7 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons, FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import colors from '../assets/colors'
 
 //pages
 import Home from "../pages/home";
@@ -35,8 +36,8 @@ function MainTabs() {
         },
         inactiveBackgroundColor: "#ffff",
         activeBackgroundColor: "#ffff",
-        inactiveTintColor: "#19062b",
-        activeTintColor: "#eb001b",
+        inactiveTintColor: colors.background,
+        activeTintColor: colors.green,
       }}
     >
       <Screen
@@ -49,7 +50,7 @@ function MainTabs() {
               <Ionicons
                 name="home"
                 size={size}
-                color={focused ? "#eb001b" : color}
+                color={focused ? colors.green : color}
               />
             );
           },
@@ -65,7 +66,7 @@ function MainTabs() {
               <FontAwesome
                 name="truck"
                 size={size}
-                color={focused ? "#eb001b" : color}
+                color={focused ? colors.green : color}
               />
             );
           },
@@ -81,7 +82,7 @@ function MainTabs() {
               <MaterialIcons
                 name="local-gas-station"
                 size={size}
-                color={focused ? "#eb001b" : color}
+                color={focused ? colors.green : color}
               />
             );
           },
@@ -97,7 +98,7 @@ function MainTabs() {
               <FontAwesome
                 name="user-circle"
                 size={size}
-                color={focused ? "#eb001b" : color}
+                color={focused ? colors.green : color}
               />
             );
           },

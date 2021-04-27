@@ -1,18 +1,21 @@
 import { StyleSheet } from "react-native";
 import { Dimensions } from "react-native";
+import colors from '../../assets/colors'
+import fonts from '../../assets/fonts'
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#19062b",
+    backgroundColor: colors.background,
     alignItems: 'center',
     padding: 0,
   },
   text: {
     marginTop: 10,
     fontSize: 12,
-    fontFamily: "Archivo_700Bold",
+    fontFamily: fonts.bold,
     color: "#fff",
-    textShadowColor: '#9999',
+    textShadowColor: '#000',
     textShadowOffset: {
       width: 5,
       height: 5
@@ -21,14 +24,14 @@ const styles = StyleSheet.create({
   },
   textRoute: {
     fontSize: 16,
-    fontFamily: "Archivo_700Bold",
+    fontFamily: fonts.bold,
     color: "#fff"
   },
   containerRoute: {
     position: 'absolute',
     borderRadius: 8,
     padding: 3,
-    backgroundColor: "#eb001b",
+    backgroundColor: colors.red,
     top: 2,
     zIndex: 5,
   },
@@ -44,7 +47,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    backgroundColor: "#19062b"
+    backgroundColor: colors.background,
   },
   map: {
     alignItems: "flex-start",

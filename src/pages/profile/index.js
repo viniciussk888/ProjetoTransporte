@@ -62,7 +62,7 @@ function Profile() {
     navigation.reset({
       routes: [
         {
-          name: "login",
+          name: "change",
         },
       ],
     });

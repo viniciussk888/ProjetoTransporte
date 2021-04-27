@@ -8,6 +8,8 @@ import {
 } from "@expo/vector-icons";
 import { RectButton } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
+import colors from '../../assets/colors'
+import fonts from '../../assets/fonts'
 import api from "../../services/api";
 
 export default function FreightCard(props) {
@@ -87,14 +89,10 @@ export default function FreightCard(props) {
 
 const styles = StyleSheet.create({
   item: {
-    backgroundColor: "#eb001b",
+    backgroundColor: colors.green,
     margin: 5,
     borderRadius: 8,
     padding: 5,
-  },
-  title: {
-    fontSize: 10,
-    color: "#fff",
   },
   cardTop: {
     flexDirection: "row",
@@ -102,9 +100,9 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   cardOrigin: {
-    fontFamily: "Archivo_700Bold",
+    fontFamily: fonts.bold,
     fontSize: 16,
-    color: "#fff",
+    color: colors.white,
     marginRight: 10,
     textShadowColor: "#000",
     textShadowOffset: {
@@ -117,7 +115,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#fff",
     marginLeft: 10,
-    fontFamily: "Archivo_700Bold",
+    fontFamily: fonts.bold,
     textShadowColor: "#000",
     textShadowOffset: {
       width: 5,
@@ -126,13 +124,13 @@ const styles = StyleSheet.create({
     textShadowRadius: 10,
   },
   cardInfo: {
-    fontFamily: "Poppins_600SemiBold",
+    fontFamily: fonts.semibold,
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 5,
   },
   cardInfoText: {
-    fontFamily: "Poppins_600SemiBold",
+    fontFamily: fonts.bold,
     fontSize: 12,
     color: "#fff",
     textShadowColor: "#000",
@@ -144,7 +142,7 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   cardInfoTextDetail: {
-    fontFamily: "Archivo_700Bold",
+    fontFamily: fonts.bold,
     fontSize: 16,
     color: "#fff",
     textShadowColor: "#000",
