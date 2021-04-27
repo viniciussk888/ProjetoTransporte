@@ -9,4 +9,4 @@
 </h1>
 
 
-Projeto React Native, desenvolvido para caminhoeiros autonomos encontrar fretes.
+Projeto React Native, desenvolvido para caminhoeiros autônomos encontrar fretes.
