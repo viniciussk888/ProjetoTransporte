@@ -8,7 +8,7 @@ import {useSelector } from "react-redux";
 import Geocoder from 'react-native-geocoding';
 import TruckAnimation from "../../assets/animations/truck.json";
 import Lottie from "lottie-react-native";
-import APIKEY from '../../../env/env'
+import APIKEY from '../../../.expo/env'
 
 export default function Splash() {
   const navigation = useNavigation();
