@@ -14,7 +14,7 @@ import {
 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import FreightCard from "../../components/freightCard";
-import Loading from "../../components/loading";
+import { ActivityIndicator } from "react-native-paper";
 import styles from "./styles";
 import { useSelector } from "react-redux";
 import AsyncStorage from "@react-native-community/async-storage";
@@ -24,12 +24,19 @@ import weatherApi from '../../services/weather'
 export default function Home() {
   const { navigate } = useNavigation();
   const [image] = useState(useSelector((state) => state.profileURL)||"none");
+  const [loading,setLoading] = useState(false)
   const [freights, setFreights] = useState([]);
   const [messageNoFreigths, setMessageNoFreigths] = useState("");
-  const [loading, setLoading] = useState(true);
   const [city, setCity] = useState("");
   const [uf, setUf] = useState("");
   const user_id = useSelector((state) => state.id);
+
+  const [currentWeather,setCurrentWeather] = useState("...")
+  const [currentTemp,setCurrentTemp] = useState(0);
+  const [tomorrowWeather,setTomorrowtWeather] = useState("...")
+  const [tomorrowTemp,setTomorrowTemp] = useState(0);
+  const [afterTomorrowWeather,setAfterTomorrowtWeather] = useState("...")
+  const [afterTomorrowTemp,setAfterTomorrowTemp] = useState(0);
 
   const config = {
     headers: {
@@ -49,6 +56,7 @@ export default function Home() {
 
   useEffect(() => {
     async function getFreights() {
+      setLoading(true)
       try {
         const lat = await AsyncStorage.getItem("latitude");
         const long = await AsyncStorage.getItem("longitude");
@@ -67,13 +75,15 @@ export default function Home() {
         );
         if (response.status === 204) {
           setFreights([]);
-          setLoading(false);
+          setLoading(false)
           return setMessageNoFreigths("Nenhum frete encontrado para região!");
         }
         setFreights(response.data);
         setMessageNoFreigths("");
+        setLoading(false)
       } catch (error) {
         console.log(error);
+        setLoading(false)
       }
     }
     getFreights();
@@ -97,10 +107,15 @@ export default function Home() {
       const lat = await AsyncStorage.getItem("latitude");
       const long = await AsyncStorage.getItem("longitude");
       try {
-        const response = await weatherApi.get(`hourly?lat=${lat}&lon=${long}&lang=pt_br&appid=2a2cc5de850aa859f11813f774fb319a`)
-        console.log(response.data)
+        const response = await weatherApi.get(`onecall?lat=${lat}&lon=${long}&exclude=hourly,minutely,alerts&lang=pt_br&appid=2a2cc5de850aa859f11813f774fb319a`)
+        setCurrentWeather(response.data.current.weather[0].description)
+        setCurrentTemp(response.data.current.temp-273.15)
+        setTomorrowtWeather(response.data.daily[0].weather[0].description)
+        setTomorrowTemp(response.data.daily[0].temp.day-273.15)
+        setAfterTomorrowtWeather(response.data.daily[1].weather[0].description)
+        setAfterTomorrowTemp(response.data.daily[1].temp.day-273.15)
       } catch (error) {
-        console.log(error)
+        console.log({fail:error})
       }
     }
     getWeather()
@@ -146,7 +161,7 @@ export default function Home() {
       </SafeAreaView>
 
       <View style={styles.container}>
-        <Text style={styles.cargasText}>Previsão do tempo da região</Text>
+        <Text style={styles.cargasText}>Previsão do tempo para região</Text>
         <View style={styles.weatherCard}>
           <View
             style={{
@@ -165,7 +180,7 @@ export default function Home() {
                 size={20}
                 color="black"
               />
-              <Text style={styles.weatherText}>Hoje{"\n"}27º Nublado</Text>
+              <Text style={styles.weatherText}>Hoje {currentTemp.toPrecision(3)}°{"\n"}{currentWeather}</Text>
             </View>
           </View>
 
@@ -182,7 +197,7 @@ export default function Home() {
                 size={20}
                 color="black"
               />
-              <Text style={styles.weatherText}>Amanhã{"\n"}27º Nublado</Text>
+              <Text style={styles.weatherText}>Amanhã {tomorrowTemp.toPrecision(3)}°{"\n"}{tomorrowWeather}</Text>
             </View>
             <View style={styles.weatherNow}>
               <MaterialCommunityIcons
@@ -190,9 +205,7 @@ export default function Home() {
                 size={20}
                 color="black"
               />
-              <Text style={styles.weatherText}>
-                Depois de amanhã{"\n"}27º Nublado
-              </Text>
+              <Text style={styles.weatherText}>Depois de amanhã {afterTomorrowTemp.toPrecision(3)}°{"\n"}{afterTomorrowWeather}</Text>
             </View>
           </View>
         </View>
@@ -219,7 +232,11 @@ export default function Home() {
               return <FreightCard key={freight.id} freight={freight} />;
             })
           ) : (
-            <Loading loading={loading} />
+            <ActivityIndicator
+              size="large"
+              animating={loading}
+              color='#fff'
+            />
           )}
         </ScrollView>
       </View>

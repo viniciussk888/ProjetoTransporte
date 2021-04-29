@@ -3,13 +3,12 @@ import { View, Text, ScrollView } from 'react-native';
 import styles from "./styles";
 import { useSelector } from 'react-redux';
 import api from '../../services/api'
-import Loading from '../../components/loading'
+import { ActivityIndicator } from "react-native-paper";
 
 import FreightCard from '../../components/freightCard'
 
 function Completed() {
   const user_id = useSelector((state) => state.id);
-  const [loading,setLoading] = useState(true)
   const [freightFinish,setFreightFinish] = useState([]);
   const config = {
     headers: {
@@ -22,9 +21,7 @@ function Completed() {
       try {
         const response = await api.get(`finish-freights/${user_id}`,config)
         setFreightFinish(response.data)
-        setLoading(false)
       } catch (error) {
-        setLoading(false)
         alert(error)
       }
     }
@@ -45,7 +42,11 @@ function Completed() {
             )  
           })
           :
-          <Loading loading={loading}/>
+          <ActivityIndicator
+              size="large"
+              animating={true}
+              color='#fff'
+            />
           }
       
       </ScrollView>

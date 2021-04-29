@@ -4,12 +4,11 @@ import styles from "./styles";
 import FreightCard from '../../components/freightCard';
 import { useSelector } from 'react-redux';
 import api from '../../services/api'
-import Loading from '../../components/loading'
+import { ActivityIndicator } from "react-native-paper";
 import { FAB } from 'react-native-paper';
 
 function Progress() {
   const user_id = useSelector((state) => state.id);
-  const [loading,setLoading] = useState(true)
   const [freightInProgress,setFreightInProgress] = useState([]);
   const config = {
     headers: {
@@ -24,10 +23,8 @@ function Progress() {
     try {
       const response = await api.get(`user-freights/${user_id}`,config)
       setFreightInProgress(response.data)
-      setLoading(false)
       setState(false)
     } catch (error) {
-      setLoading(false)
       setState(false)
       alert(error)
     }
@@ -51,7 +48,11 @@ function Progress() {
             )  
           })
           :
-          <Loading loading={loading}/>
+          <ActivityIndicator
+              size="large"
+              animating={true}
+              color='#fff'
+            />
           }
       
       </ScrollView>

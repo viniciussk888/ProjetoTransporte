@@ -1,15 +1,15 @@
 import React,{useState,useEffect} from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView,Alert } from 'react-native';
 import styles from "./styles";
 import FreightCard from '../../components/freightCard';
 import { useSelector } from 'react-redux';
 import api from '../../services/api'
-import Loading from '../../components/loading'
+import { ActivityIndicator } from "react-native-paper";
 import { FAB } from 'react-native-paper';
 
 function Wait() {
+  const [loading,setLoading] = useState(false)
   const user_id = useSelector((state) => state.id);
-  const [loading,setLoading] = useState(true)
   const [freightInWait,setFreightInWait] = useState([]);
   const config = {
     headers: {
@@ -20,16 +20,17 @@ function Wait() {
   const [state, setState] = useState(false);
 
   async function getFreightInWait(){
+    setLoading(true)
     setState(true);
     try {
       const response = await api.get(`user-negotiations/${user_id}`,config)
       setFreightInWait(response.data)
-      setLoading(false)
       setState(false)
+      setLoading(false)
     } catch (error) {
-      setLoading(false)
       setState(false)
-      alert(error)
+      setLoading(false)
+      Alert.alert("ATENÇÃO",error)
     }
   }
 
@@ -48,7 +49,11 @@ function Wait() {
             )  
           })
           :
-          <Loading loading={loading}/>
+          <ActivityIndicator
+              size="large"
+              animating={loading}
+              color='#fff'
+            />
           }
       
       </ScrollView>

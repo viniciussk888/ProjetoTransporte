@@ -2,16 +2,16 @@ import React,{useState} from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import styles from "./styles";
 import FreightCard from '../../components/freightCard';
-import Loading from '../../components/loading'
+import { ActivityIndicator } from "react-native-paper";
 import { Searchbar } from "react-native-paper";
 import Header from '../../components/header';
 import api from '../../services/api'
+import colors from '../../assets/colors';
 
 function Search() {
 
   const [city,setCity] = useState('');
   const [freights,setFreights] = useState([])
-  const [loading,setLoading] = useState(false)
 
   async function searchFreights(){
     setLoading(true)
@@ -55,7 +55,11 @@ function Search() {
             )  
           })
           :
-          <Loading loading={loading}/>
+          <ActivityIndicator
+              size="large"
+              animating={true}
+              color={colors.white}
+            />
           }
       </ScrollView>
     </View>
