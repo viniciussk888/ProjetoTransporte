@@ -4,12 +4,12 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flexDirection: 'column',
-    width: 150,
-    height: 95,
+    width: 120,
+    height: "80%",
     padding: 2,
     marginRight: 10,
     borderRadius: 8,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   logo:{
     width:'100%',

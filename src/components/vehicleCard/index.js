@@ -5,6 +5,7 @@ import api from "../../services/api";
 
 import styles from "./styles";
 import { RectButton } from "react-native-gesture-handler";
+import colors from "../../assets/colors";
 
 export default function VehicleCard({ deleted, vehicle, config }) {
   async function deleteVehicle() {
@@ -62,7 +63,7 @@ export default function VehicleCard({ deleted, vehicle, config }) {
       >
         <Text style={styles.title}>{vehicle.property}</Text>
         <RectButton onPress={confirmDeleteVehicle}>
-          <AntDesign name="delete" size={24} color="#fff" />
+          <AntDesign name="delete" size={24} color={colors.red} />
         </RectButton>
       </View>
     </View>

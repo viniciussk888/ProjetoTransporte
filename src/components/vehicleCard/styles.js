@@ -1,9 +1,11 @@
 import { StyleSheet } from 'react-native'
+import colors from '../../assets/colors'
+import fonts from '../../assets/fonts'
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
-    backgroundColor: '#eb001b',
+    backgroundColor: colors.green,
     width:250,
     height:270,
     marginHorizontal: 5,
@@ -12,7 +14,7 @@ const styles = StyleSheet.create({
     marginBottom:50
   },
   title: {
-    fontFamily: 'Poppins_600SemiBold',
+    fontFamily: fonts.semiBold,
     fontSize: 10,
     color: "#fff",
     textShadowColor: '#000',

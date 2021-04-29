@@ -118,7 +118,7 @@ function Locations() {
 
   return (
     <>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.header}>
           <View style={styles.contentTitle}>
             <Text style={styles.textTitle}>
@@ -130,7 +130,7 @@ function Locations() {
             Compre em empresas parceiras com desconto
           </Text>
 
-          <SafeAreaView style={{ marginBottom: 5 }}>
+          <View style={{ marginBottom: 5 }}>
             <ScrollView horizontal>
               {companies.map((company) => (
                 <RectButton onPress={() => navigateToCompanyDetails(company)}>
@@ -140,7 +140,7 @@ function Locations() {
                 </RectButton>
               ))}
             </ScrollView>
-          </SafeAreaView>
+          </View>
         </View>
         <MapView
           showsUserLocation
@@ -197,7 +197,7 @@ function Locations() {
         {currentRegion !== null && (
           <LocationModal sync={sync} coords={currentRegion} />
         )}
-      </View>
+      </SafeAreaView>
     </>
   );
 }

@@ -1,5 +1,8 @@
 import { StyleSheet } from "react-native";
 import { Dimensions } from "react-native";
+import colors from '../../assets/colors'
+import fonts from '../../assets/fonts'
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -16,7 +19,7 @@ const styles = StyleSheet.create({
     minHeight: "27%",
     width: Dimensions.get("window").width,
     padding: 30,
-    backgroundColor: "#19062b",
+    backgroundColor: colors.background,
     flexDirection: "column",
     alignItems: "flex-start",
   },
@@ -24,13 +27,13 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   textTitle: {
-    fontFamily: "Archivo_700Bold",
+    fontFamily: fonts.bold,
     color: "#fff",
     fontSize: 16,
   },
   textCategory: {
     marginVertical: 10,
-    fontFamily: "Archivo_400Regular",
+    fontFamily: fonts.textPrimary,
     color: "#fff",
     fontSize: 14,
     lineHeight: 25,
@@ -51,8 +54,7 @@ const styles = StyleSheet.create({
     width: 185,
   },
   Name: {
-    fontFamily: "Archivo_700Bold",
-    fontWeight: "bold",
+    fontFamily: fonts.bold,
     fontSize: 12,
   },
   Bio: {

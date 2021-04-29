@@ -77,13 +77,13 @@ export default function Login() {
         behavior={Platform.OS == "ios" ? "padding" : "height"}
         style={styles.container}
       >
-        <Lottie
+       {/* <Lottie
           source={SigninAnimation}
           autoPlay
           loop
           resizeMode="contain"
           autoSize
-        />
+       />*/}
 
         <View style={styles.titleContainer}>
           <Text style={styles.title}>

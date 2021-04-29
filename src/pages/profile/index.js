@@ -19,6 +19,7 @@ import api from "../../services/api";
 import { useSelector } from "react-redux";
 import Firebase from "../../services/firebase";
 import * as ImagePicker from "expo-image-picker";
+import colors from '../../assets/colors'
 
 function Profile() {
   const dispatch = useDispatch();
@@ -271,7 +272,7 @@ function Profile() {
               style={{
                 marginTop: 15,
               }}
-              color="#eb001b"
+              color={colors.green}
               mode="contained"
               onPress={updateUser}
             >

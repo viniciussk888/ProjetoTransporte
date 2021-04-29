@@ -1,6 +1,9 @@
 import React from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
+import colors from '../assets/colors'
+import fonts from '../assets/fonts'
+
 const Tab = createMaterialTopTabNavigator();
 
 import Progress from "../pages/fProgress/";
@@ -15,14 +18,14 @@ export default function MyTopTabs() {
       inactiveTintColor: "#fff9",
       labelStyle: {
         fontSize: 10,
-        fontFamily: "Archivo_400Regular"
+        fontFamily: fonts.semiBold
       },
       indicatorStyle: {
         backgroundColor: "#fff",
         borderRadius: 100,
       },
       style: {
-        backgroundColor: "#eb001b",
+        backgroundColor: colors.green,
         borderRadius: 8,
       },
     }}

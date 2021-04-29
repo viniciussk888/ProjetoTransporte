@@ -14,6 +14,7 @@ import api from "../../services/api";
 import { useSelector } from "react-redux";
 import { FAB } from "react-native-paper";
 import AsyncStorage from "@react-native-community/async-storage";
+import colors from '../../assets/colors'
 
 const LocationModal = ({ sync, coords }) => {
   const [loading, setLoading] = useState(false);
@@ -82,14 +83,13 @@ const LocationModal = ({ sync, coords }) => {
               <View style={styles.closeButonView}>
                 <Button
                   style={styles.closeButon}
-                  color="#eb001b"
                   onPress={() => setModalVisible(!modalVisible)}
                 >
                   <AntDesign
                     style={styles.closeButon}
                     name="closecircle"
                     size={30}
-                    color="red"
+                    color={colors.red}
                   />
                 </Button>
               </View>
@@ -146,7 +146,7 @@ const LocationModal = ({ sync, coords }) => {
                 ) : (
                   <Button
                     onPress={createLocation}
-                    color="#eb001b"
+                    color={colors.green}
                     mode="contained"
                   >
                     GRAVAR
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   fab: {
-    backgroundColor: "#eb001b",
+    backgroundColor: colors.yellow,
     position: "absolute",
     margin: 10,
     right: 0,
