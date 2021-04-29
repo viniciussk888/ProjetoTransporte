@@ -1,6 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, ScrollView, SafeAreaView, Alert } from "react-native";
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import {
+  Text,
+  View,
+  ScrollView,
+  SafeAreaView,
+  Alert,
+  Image,
+} from "react-native";
+import {
+  FontAwesome,
+  Ionicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import FreightCard from "../../components/freightCard";
 import Loading from "../../components/loading";
@@ -8,9 +19,11 @@ import styles from "./styles";
 import { useSelector } from "react-redux";
 import AsyncStorage from "@react-native-community/async-storage";
 import api from "../../services/api";
+import weatherApi from '../../services/weather'
 
 export default function Home() {
   const { navigate } = useNavigation();
+  const [image] = useState(useSelector((state) => state.profileURL)||"none");
   const [freights, setFreights] = useState([]);
   const [messageNoFreigths, setMessageNoFreigths] = useState("");
   const [loading, setLoading] = useState(true);
@@ -79,13 +92,40 @@ export default function Home() {
     checkStatus();
   }, []);
 
+  useEffect(() => {
+    async function getWeather(){
+      const lat = await AsyncStorage.getItem("latitude");
+      const long = await AsyncStorage.getItem("longitude");
+      try {
+        const response = await weatherApi.get(`hourly?lat=${lat}&lon=${long}&lang=pt_br&appid=2a2cc5de850aa859f11813f774fb319a`)
+        console.log(response.data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getWeather()
+  }, []);
+
   return (
     <>
-      <View style={styles.headerHomeContainer}>
-        <Text style={styles.wellcomeText}>
-          Bem vindo,{" "}
-          {getSimpleName(useSelector((state) => state.name) || "Usuário")}
-        </Text>
+      <SafeAreaView style={styles.headerHomeContainer}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Image
+            source={{ uri: image }}
+            style={{
+              width: 50,
+              height: 50,
+              borderRadius: 100,
+              borderColor: "#fff",
+              borderWidth: 1,
+            }}
+          />
+          <Text style={styles.wellcomeText}>
+            Bem vindo,{"\n"}
+            {getSimpleName(useSelector((state) => state.name) || "Usuário")}
+          </Text>
+        </View>
+
         <View style={{ flexDirection: "column", alignItems: "center" }}>
           <FontAwesome
             onPress={navigateToSearch}
@@ -103,23 +143,67 @@ export default function Home() {
             Buscar fretes
           </Text>
         </View>
-      </View>
+      </SafeAreaView>
 
-      <SafeAreaView style={styles.container}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Ionicons name="location" size={18} color="#fff" />
-          <Text
+      <View style={styles.container}>
+        <Text style={styles.cargasText}>Previsão do tempo da região</Text>
+        <View style={styles.weatherCard}>
+          <View
             style={{
-              color: "#fff",
-              fontSize: 10,
-              fontFamily: "Poppins_600SemiBold",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              width: "100%",
             }}
           >
-            {city + "-" + uf}
-          </Text>
+            <View style={styles.weatherNow}>
+              <Ionicons name="location" size={18} color="#000" />
+              <Text style={styles.weatherText}>{city + "-" + uf}</Text>
+            </View>
+            <View style={styles.weatherNow}>
+              <MaterialCommunityIcons
+                name="weather-cloudy"
+                size={20}
+                color="black"
+              />
+              <Text style={styles.weatherText}>Hoje{"\n"}27º Nublado</Text>
+            </View>
+          </View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
+            <View style={styles.weatherNow}>
+              <MaterialCommunityIcons
+                name="weather-cloudy"
+                size={20}
+                color="black"
+              />
+              <Text style={styles.weatherText}>Amanhã{"\n"}27º Nublado</Text>
+            </View>
+            <View style={styles.weatherNow}>
+              <MaterialCommunityIcons
+                name="weather-cloudy"
+                size={20}
+                color="black"
+              />
+              <Text style={styles.weatherText}>
+                Depois de amanhã{"\n"}27º Nublado
+              </Text>
+            </View>
+          </View>
         </View>
 
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginTop: 10,
+          }}
+        >
           <Text style={styles.cargasText}>Cargas disponíveis na região</Text>
           <Text style={styles.cargasText}>Total: {freights.length}</Text>
         </View>
@@ -138,7 +222,7 @@ export default function Home() {
             <Loading loading={loading} />
           )}
         </ScrollView>
-      </SafeAreaView>
+      </View>
     </>
   );
 }

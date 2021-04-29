@@ -1,9 +1,11 @@
 import { StyleSheet } from "react-native";
+import colors from '../../assets/colors'
+import fonts from '../../assets/fonts'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#19062b",
+    backgroundColor: colors.background,
     padding: 30,
   },
   logoContainer:{
@@ -12,8 +14,8 @@ const styles = StyleSheet.create({
     marginBottom:20
   },
   logo:{
-      height:200,
-      width:'100%',
+      height:160,
+      width:'80%',
       borderRadius:8,
       borderWidth:2,
       borderColor:"#fff"
@@ -21,20 +23,19 @@ const styles = StyleSheet.create({
   textTitle: {
     marginTop: 5,
     fontSize: 24,
-    fontFamily: "Poppins_400Regular",
-    fontWeight:'bold',
+    fontFamily: fonts.bold,
     color: "#fff"
   },
   text: {
     marginTop: 5,
     fontSize: 16,
-    fontFamily: "Poppins_400Regular",
+    fontFamily: fonts.textSecondary,
     color: "#fff"
   },
   textFooter: {
     marginTop: 5,
     fontSize: 12,
-    fontFamily: "Poppins_400Regular",
+    fontFamily: fonts.textSecondary,
     color: "#fff"
   }
 });

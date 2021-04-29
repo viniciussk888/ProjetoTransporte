@@ -13,6 +13,7 @@ import { Picker } from "@react-native-picker/picker";
 import { RectButton } from "react-native-gesture-handler";
 import Firebase from "../../services/firebase";
 import * as ImagePicker from "expo-image-picker";
+import colors from '../../assets/colors'
 
 export default function Vehicle({ route }) {
   const navigation = useNavigation();
@@ -254,7 +255,7 @@ export default function Vehicle({ route }) {
           <View style={styles.radioContainer}>
             <RadioButton
               value="first"
-              color="#eb001b"
+              color={colors.green}
               label="Próprio"
               status={checked === "Próprio" ? "checked" : "unchecked"}
               onPress={() => {
@@ -264,7 +265,7 @@ export default function Vehicle({ route }) {
             <Text style={{ fontWeight: "bold", marginRight: 30 }}>Próprio</Text>
             <RadioButton
               value="second"
-              color="#eb001b"
+              color={colors.green}
               label="Terceiro"
               status={checked === "Terceiro" ? "checked" : "unchecked"}
               onPress={() => {
@@ -325,7 +326,7 @@ export default function Vehicle({ route }) {
             <Button
               onPress={confirmRegister}
               style={{ width: "100%" }}
-              color="#eb001b"
+              color={colors.green}
               mode="contained"
             >
               Cadastrar
