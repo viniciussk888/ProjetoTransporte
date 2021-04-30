@@ -10,7 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Button, ActivityIndicator } from "react-native-paper";
 import api from "../../services/api";
 import styles from "./styles";
-import SigninAnimation from "../../assets/animations/signin.json";
+import Truck from "../../assets/animations/truck.json";
 import Lottie from "lottie-react-native";
 import { useDispatch } from "react-redux";
 
@@ -77,13 +77,13 @@ export default function Login() {
         behavior={Platform.OS == "ios" ? "padding" : "height"}
         style={styles.container}
       >
-       {/* <Lottie
-          source={SigninAnimation}
+       <Lottie
+          source={Truck}
           autoPlay
           loop
           resizeMode="contain"
           autoSize
-       />*/}
+       />
 
         <View style={styles.titleContainer}>
           <Text style={styles.title}>
